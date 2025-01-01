@@ -37,6 +37,13 @@ const noBtn = document.querySelector('.noBtn');
 
 //managing workouts--- creating classes 
 
+
+//find popup classname
+//find marker classname
+
+
+
+
 class Workout{
 
     date = new Date();
@@ -130,7 +137,9 @@ class App{
             //makes sure one of them is hidden when other is clicked 
             
         containerWorkouts.addEventListener('click', this._moveToPop.bind(this)); 
- }
+        clearAll.addEventListener('click', this._clearAllWorkouts.bind(this));
+
+    }
 
     _getPosition(){
 
@@ -257,7 +266,7 @@ class App{
             iconAnchor: [24, 3],
            
         })
-        L.marker(workout.coords , {icon: icon}).addTo(this.#map) //pop up : default
+        const marker = L.marker(workout.coords , {icon: icon}).addTo(this.#map) //pop up : default
             .bindPopup(L.popup({
                    maxWidth: 250,
                    minWidth: 100,
@@ -268,65 +277,64 @@ class App{
            .setPopupContent(`${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.description}`) //create pop and bind to marker
            .openPopup();
 
+           workout.markerId = marker._leaflet_id;
     }
 
     _renderWorkout(workout){
         let html = ` 
-        <li class="workout workout--${workout.type}"     data-id="${workout.id}">
+        <li class="workout workout--${workout.type}" data-id="${workout.id}">
+            <h2 class="workout__title">${workout.description}</h2>
             <i class="fa-solid fa-trash deleteWorkoutBtn"></i>
-            <h2 class="workout__title">${workout.description} </h2>
-        
-          <div class="workout__details">
-            <span class="workout__icon">${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'}</span>
-            <span class="workout__value">${workout.distance}</span>
-            <span class="workout__unit">km</span>
-          </div>
-          <div class="workout__details">
-            <span class="workout__icon">⏱</span>
-            <span class="workout__value">${workout.duration}</span>
-            <span class="workout__unit">min</span>
-          </div>
-          `;
 
-          if(workout.type === 'running'){
+            <div class="workout__details">
+                <span class="workout__icon">${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'}</span>
+                <span class="workout__value">${workout.distance}</span>
+                <span class="workout__unit">km</span>
+            </div>
+            <div class="workout__details">
+                <span class="workout__icon">⏱</span>
+                <span class="workout__value">${workout.duration}</span>
+                <span class="workout__unit">min</span>
+            </div>
+        `;
+    
+        if(workout.type === 'running'){
             html += `
-
             <div class="workout__details">
                 <span class="workout__icon">⚡️</span>
                 <span class="workout__value">${workout.pace.toFixed(1)}</span>
                 <span class="workout__unit">min/km</span>
-          </div>
-          <div class="workout__details">
-            <span class="workout__icon">🦶🏼</span>
-            <span class="workout__value">${workout.cadence}</span>
-            <span class="workout__unit">spm</span>
-          </div>
-        </li>
+            </div>
+            <div class="workout__details">
+                <span class="workout__icon">🦶🏼</span>
+                <span class="workout__value">${workout.cadence}</span>
+                <span class="workout__unit">spm</span>
+            </div>
             `;
-          }
-
-          if(workout.type === 'cycling'){
+        }
+    
+        if(workout.type === 'cycling'){
             html += `
             <div class="workout__details">
                 <span class="workout__icon">⚡️</span>
-                <span class="workout__value">${workout.speed}</span>
+                <span class="workout__value">${workout.speed.toFixed(1)}</span>
                 <span class="workout__unit">km/h</span>
             </div>
-          <div class="workout__details">
-            <span class="workout__icon">⛰</span>
-            <span class="workout__value">${workout.elevation.toFixed(1)}</span>
-            <span class="workout__unit">m</span>
-          </div>
-        </li> 
+            <div class="workout__details">
+                <span class="workout__icon">⛰</span>
+                <span class="workout__value">${workout.elevation.toFixed(1)}</span>
+                <span class="workout__unit">m</span>
+            </div>
             `;
-          }
-
-        
+        }
     
-          form.insertAdjacentHTML('afterend', html);
+        form.insertAdjacentHTML('afterend', html);
+        // deleteWorkoutBtn.addEventListener('click', _deleteWorkout);
 
-
+        const deleteWorkoutBtn = document.querySelector('.deleteWorkoutBtn');
+        deleteWorkoutBtn.addEventListener('click', this._deleteWorkout.bind(this));
     }
+
 
     _moveToPop(e){
 
@@ -371,7 +379,6 @@ class App{
 
         })
 
-
     }
 
     // deleteworkout(){
@@ -388,35 +395,129 @@ class App{
         localStorage.removeItem('workout');
         location.reload();
     }
+
+    showCard = function(){
+
+        //if no workouts
+    
+        if(localStorage.length === 0 && !this.#workouts) return;
+    
+        
+        clearAllCard.classList.remove('hide');
+        overlay.classList.remove('hide');
+    
+        confirmBtn.addEventListener('click', function(){
+                app.reset();
+        })
+    
+        noBtn.addEventListener('click', function(){
+                clearAllCard.classList.add('hide');
+                overlay.classList.add('hide');
+        }) 
+    
+    }
+    _deleteWorkout(e){
+
+        try{
+
+            const workoutEl = e.target.closest('.workout');
+
+            if(!workoutEl) return;
+
+            const workout = this.#workouts.find(work => work.id === workoutEl.dataset.id ); 
+            
+            if(!workout) return;
+            //remove workout from array
+            const i = this.#workouts.indexOf(workout);
+            this.#workouts.splice(i, 1);
+            console.log(i);
+
+            //remove from UI
+            workoutEl.remove();
+            //remove from local storage
+           
+            this._setLocalStorage().removeItem(workout); //first set local storage then remove item
+            
+            //remove from map
+            console.log('test');
+
+            
+           const marker = this.#map._layers[workout.markerId];
+           if(marker) this.#map.removeLayer(marker);
+           this._findpopup(marker, workout).remove();
+            
+            
+            
+        // //reset map
+        // this.#map.removeLayer(workout);
+        }catch(err){
+            console.error(err);
+        }
+        
+    }
+
+    _clearAllWorkouts() {
+        this.showCard();
+    }
+    
+    
+    _findpopup = function(popup, workout){
+        const p = popup.find(
+            (popup) => popup.className === `leaflet-popup ${workout.type}-popup`
+        );
+        console.log(p);
+        return p;
+        
+    }
+    
 }
+// _clearAllWorkouts() {
+//     this.showCard();
+// }
+
+// _attachEventHandlers() {
+//     form.addEventListener('submit', this._newWorkout.bind(this));
+//     inputType.addEventListener('change', this._toggleElevationField);
+//     containerWorkouts.addEventListener('click', this._moveToPop.bind(this));
+//     clearAll.addEventListener('click', this._clearAllWorkouts.bind(this));
+// }
+
+// constructor() {
+//     this._getPosition();
+//     this._getLocalStorage();
+//     this._attachEventHandlers();
+// }
+// clearAll.addEventListener('click', function(){
+//     showCard();
+// })
 
 const app = new App();
 
-const showCard = function(){
+// const showCard = function(){
 
-    //if no workouts
+//     //if no workouts
 
-    if(localStorage.length === 0) return;
+//     if(localStorage.length === 0) return;
 
     
-    clearAllCard.classList.remove('hide');
-    overlay.classList.remove('hide');
+//     clearAllCard.classList.remove('hide');
+//     overlay.classList.remove('hide');
 
-    confirmBtn.addEventListener('click', function(){
-            app.reset();
-    })
+//     confirmBtn.addEventListener('click', function(){
+//             app.reset();
+//     })
 
-    noBtn.addEventListener('click', function(){
-            clearAllCard.classList.add('hide');
-            overlay.classList.add('hide');
-    }) 
+//     noBtn.addEventListener('click', function(){
+//             clearAllCard.classList.add('hide');
+//             overlay.classList.add('hide');
+//     }) 
 
-}
-//btn - clearAll
+// }
+// //btn - clearAll
 
-clearAll.addEventListener('click', function(){
-    showCard();
-})
+// clearAll.addEventListener('click', function(){
+//     showCard();
+// })
 
 
 
