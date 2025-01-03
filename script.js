@@ -16,6 +16,7 @@ const inputDistance = document.querySelector('.form__input--distance');
 const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
+const msg = document.querySelector('.msg');
 
 //buttons
 
@@ -138,7 +139,12 @@ class App{
             
         containerWorkouts.addEventListener('click', this._moveToPop.bind(this)); 
         clearAll.addEventListener('click', this._clearAllWorkouts.bind(this));
-
+        document.querySelector('.workouts').addEventListener('click', (e)=>{
+            if(e.target.classList.contains('deleteWorkoutBtn')){ 
+                //event delegation for when searching for an el thats being created dynamically --> learned in course tooo!!!!! REMEMBER !!!
+                this._showCard('deleteWorkout', e); 
+            }
+        });
     }
 
     _getPosition(){
@@ -210,6 +216,7 @@ class App{
         e.preventDefault();
 
 
+
         const validInput = (...inputs) => inputs.every(inp => Number.isFinite(inp) );
         const posNumbers = (...inputs) => inputs.every(inp => inp>0);
         //get data from form
@@ -278,6 +285,7 @@ class App{
            .openPopup();
 
            workout.markerId = marker._leaflet_id;
+      
     }
 
     _renderWorkout(workout){
@@ -329,10 +337,15 @@ class App{
         }
     
         form.insertAdjacentHTML('afterend', html);
+        msg.classList.add('hide');
+
+        clearAll.classList.remove('hide');
+        
+
         // deleteWorkoutBtn.addEventListener('click', _deleteWorkout);
 
-        const deleteWorkoutBtn = document.querySelector('.deleteWorkoutBtn');
-        deleteWorkoutBtn.addEventListener('click', this._deleteWorkout.bind(this));
+        // const deleteWorkoutBtn = document.querySelector('.deleteWorkoutBtn');
+        // deleteWorkoutBtn.addEventListener('click', _showCard('deleteWorkout'));
     }
 
 
@@ -346,6 +359,8 @@ class App{
 
         const workout = this.#workouts.find(work => work.id === 
             workoutEl.dataset.id ); 
+        
+        if(!workout) return;
 
         this.#map.setView(workout.coords, this.#mapZoom, {
             animate: true,
@@ -358,11 +373,23 @@ class App{
 
     }
 
-    _setLocalStorage(){
-        //a very simple API --> only to be used small data, not large data...
-        
-        localStorage.setItem('workout', JSON.stringify(this.#workouts));
-    }
+    _setMapViewtoPop(){
+        this.#map.addEventListener('click', function(e){
+            const popup = e.target.closest('.leaflet-popup');
+            if(!popup) return;
+            const workout = this.#workouts.find(work => work.id === popup.dataset.id);
+
+            this.#map.setView(workout.coords, this.#mapZoom, {
+                animate: true,
+                pan:{
+                    duration: 1,
+                },
+            });
+
+    })
+}
+
+    
 
     _getLocalStorage(){
         const data = JSON.parse(localStorage.getItem('workout'));
@@ -381,41 +408,6 @@ class App{
 
     }
 
-    // deleteworkout(){
-    //     const workEl = e.target.closest('.workout');
-
-    //     if(!workEl) return;
-
-        
-
-
-    // }
-    reset(){
-
-        localStorage.removeItem('workout');
-        location.reload();
-    }
-
-    showCard = function(){
-
-        //if no workouts
-    
-        if(localStorage.length === 0 && !this.#workouts) return;
-    
-        
-        clearAllCard.classList.remove('hide');
-        overlay.classList.remove('hide');
-    
-        confirmBtn.addEventListener('click', function(){
-                app.reset();
-        })
-    
-        noBtn.addEventListener('click', function(){
-                clearAllCard.classList.add('hide');
-                overlay.classList.add('hide');
-        }) 
-    
-    }
     _deleteWorkout(e){
 
         try{
@@ -436,15 +428,21 @@ class App{
             workoutEl.remove();
             //remove from local storage
            
-            this._setLocalStorage().removeItem(workout); //first set local storage then remove item
-            
+            console.log('test1');
+            this._setLocalStorage();
+            // localStorage.removeItem(workout.id);
+
+            /**update: dont directly call remove item on setstorage as it creates errors; and dont 
+             * directly remove item from local storage as it will remove all items from local storage n return upon refresh
+             * instead, remove from array, then set local storage; hence, the item will be removed from local storage
+             */
             //remove from map
             console.log('test');
 
             
            const marker = this.#map._layers[workout.markerId];
            if(marker) this.#map.removeLayer(marker);
-           this._findpopup(marker, workout).remove();
+        //    this._findpopup(marker, workout).remove();
             
             
             
@@ -456,8 +454,60 @@ class App{
         
     }
 
+    _setLocalStorage(){
+        //a very simple API --> only to be used small data, not large data...
+        
+      localStorage.setItem('workout', JSON.stringify(this.#workouts));
+    }
+    // deleteworkout(){
+    //     const workEl = e.target.closest('.workout');
+
+    //     if(!workEl) return;
+
+        
+
+
+    // }
+    reset(){
+
+        localStorage.removeItem('workout');
+        location.reload();
+    }
+
+    _showCard(action, e){
+
+        //if no workouts
+    
+        if(localStorage.length === 0 && !this.#workouts) return;
+    
+        
+        clearAllCard.classList.remove('hide');
+        overlay.classList.remove('hide');
+    
+        confirmBtn.addEventListener('click', ()=>{ //arrow function to bind this keyword; use arrow when error is not a function !!!!
+            if(action === 'clearAll'){
+                 app.reset();
+            }
+            if(action === 'deleteWorkout'){
+               this._deleteWorkout(e);
+
+            }
+            clearAllCard.classList.add('hide');
+            overlay.classList.add('hide');
+        })
+
+
+
+        noBtn.addEventListener('click', function(){
+                clearAllCard.classList.add('hide');
+                overlay.classList.add('hide');
+        }) 
+    
+    }
+    
+
     _clearAllWorkouts() {
-        this.showCard();
+        this._showCard('clearAll');
     }
     
     
@@ -493,31 +543,7 @@ class App{
 
 const app = new App();
 
-// const showCard = function(){
 
-//     //if no workouts
-
-//     if(localStorage.length === 0) return;
-
-    
-//     clearAllCard.classList.remove('hide');
-//     overlay.classList.remove('hide');
-
-//     confirmBtn.addEventListener('click', function(){
-//             app.reset();
-//     })
-
-//     noBtn.addEventListener('click', function(){
-//             clearAllCard.classList.add('hide');
-//             overlay.classList.add('hide');
-//     }) 
-
-// }
-// //btn - clearAll
-
-// clearAll.addEventListener('click', function(){
-//     showCard();
-// })
 
 
 

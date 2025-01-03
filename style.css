@@ -112,6 +112,17 @@ a:visited {
   background: #242222;
   color: #ececec;
 }
+
+.msg{
+  align-items: center;
+  margin-left: 3em;
+  font-size: 1.4rem;
+  line-height: 1.5;
+  margin-top: 50px;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--color-light--1);
+}
 .workouts {
   list-style: none;
   height: 77vh;
