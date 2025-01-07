@@ -145,6 +145,7 @@ class App{
                 this._showCard('deleteWorkout', e); 
             }
         });
+        this._setMapViewtoPop();
     }
 
     _getPosition(){
@@ -189,6 +190,7 @@ class App{
 
     _showForm(mapE){
 
+        msg.classList.add('hide');
         this.#mapEvent = mapE;
         form.classList.remove('hidden');
         inputDistance.focus();
@@ -373,22 +375,33 @@ class App{
 
     }
 
-    _setMapViewtoPop(){
-        this.#map.addEventListener('click', function(e){
-            const popup = e.target.closest('.leaflet-popup');
-            if(!popup) return;
-            const workout = this.#workouts.find(work => work.id === popup.dataset.id);
-
-            this.#map.setView(workout.coords, this.#mapZoom, {
-                animate: true,
-                pan:{
-                    duration: 1,
-                },
-            });
-
-    })
-}
-
+    _setMapViewtoPop() {
+        const popup = document.querySelectorAll('.leaflet-popup');
+        console.log(popup);
+        // popup[0].addEventListener('click', function(e) {
+        //     console.log('popup clicked');
+        // });
+        // this.#map.on('popupopen', (e) => {
+        //     const popupContent = e.popup.getContent();
+        //     const popupElement = document.createElement('div');
+        //     popupElement.innerHTML = popupContent;
+    
+        //     const workoutEl = popupElement.querySelector(`.${e.popup.options.className}`);
+        //     if (!workoutEl) return;
+    
+        //     const workout = this.#workouts.find(work => work.id === workoutEl.dataset.id);
+        //     if (!workout) return;
+    
+        //     this.#map.setView(workout.coords, this.#mapZoom, {
+        //         animate: true,
+        //         pan: {
+        //             duration: 1,
+        //         },
+        //     });
+        // });
+    }
+    
+    // Call _setMapViewtoPop in the constructor or initialization method
     
 
     _getLocalStorage(){
@@ -558,7 +571,3 @@ const app = new App();
 
 //8. using thirdparty api geocode location from coordinates 
 //9. display weather conditions
-
-
-
-
