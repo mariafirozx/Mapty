@@ -303,8 +303,13 @@ a:visited {
   color: var(--color-light--2);
   border-radius: 11px;
   padding-right: 0.6rem;
+  cursor: pointer;
 }
 
+.leaflet-popup .leaflet-popup-content-wrapper:hover {
+  transform: scale(1.05); /* Enlarge on hover */
+  transition: ease-in-out;
+}
 .leaflet-popup .leaflet-popup-content {
   font-size: 1.5rem;
 }
