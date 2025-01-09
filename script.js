@@ -114,6 +114,8 @@ class Cycling extends Workout{
 
 class App{
 
+    map = document.querySelector('#map');
+
     #map; 
     #mapEvent;
     #mapZoom = 13;
@@ -147,7 +149,9 @@ class App{
             }
         });
 
-        map.addEventListener('click', this._setMapViewtoPop.bind(this))
+        // map.addEventListener('click', this._setMapViewtoPop.bind(this));
+        // this.addhandlerSetViewtoPop(this._setMapViewtoPop);
+        //  this._setMapViewtoPop();
     }
 
     _getPosition(){
@@ -177,6 +181,7 @@ class App{
             }).addTo(this.#map);
 
             this.#map.on('click', this._showForm.bind(this));
+            this._setMapViewtoPop();
                 
             this.#workouts.forEach(work => {
                 this._renderWorkoutMarker(work);
@@ -285,9 +290,7 @@ class App{
                    closeOnClick: false,
                    className: `${workout.type}-popup ${workout.id}`,
             }))
-           .setPopupContent(`<div class="popup-content" data-id="${workout.id}">
-                ${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.description}
-             </div>`) //create pop and bind to marker
+           .setPopupContent(`${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.description}`) //create pop and bind to marker
            .openPopup();
 
            workout.markerId = marker._leaflet_id;
@@ -381,15 +384,107 @@ class App{
 
     }
 
-    _setMapViewtoPop(e) {
+    addhandlerSetViewtoPop(handler){
+        if(!this.map) {
+            console.log('map not loaded');
+            return;
 
-        const pEL = e.target.closest('.leaflet-popup');
-        console.log(pEL);
+        }
+        this.map.addEventListener('click', function(e){
+            console.log(e.target);
+            const popup = e.target.closest('.leaflet-popup');
+            console.log(popup);
+            if(!popup) return;
 
-        if(!pEL) return;
+            handler(popup);
+        })
 
-        const popupID = pEL.getAttribute('data-id');
-        console.log(popupID);
+    }
+    findpopup(popups, workout){
+        console.log(workout);
+        const p = popups.find(
+            (popup) => popup.className === `leaflet-popup ${workout.type}-popup ${workout.id} leaflet-zoom-animated`
+        );
+        console.log(p);
+        console.log('found popup');
+        return p;
+    }
+
+
+  _ViewToPopup(workout) {
+    if (!workout || !workout.coords) {
+        console.error('Invalid workout or workout coordinates:', workout);
+        return;
+    }
+    this.#map.setView(workout.coords, this.#mapZoom, {
+      animate: true,
+      pan: {
+        duration: 1,
+      },
+    });
+  }
+
+    _setMapViewtoPop() {
+
+        this.#map.on('popupopen', (e) => {
+            const popupContent = e.popup._contentNode.querySelector('.leaflet-popup-content');
+            if (!popupContent) return;
+
+            popupContent.addEventListener('click', (event) => {
+                const workoutEl = event.target.closest('.leaflet-popup-content');
+                if (!workoutEl) return;
+
+                const workout = this.#workouts.find(work => work.id === workoutEl.dataset.id);
+                if (!workout) return;
+
+                this.#map.setView(workout.coords, this.#mapZoom, {
+                    animate: true,
+                    pan: {
+                        duration: 1,
+                    },
+                });
+            });
+        });
+
+        // console.log(popup);
+    
+        
+        // const workout = this.findpopup(this.#workouts, popup);
+        // if (!workout) {
+        //     console.error('No workout found for the given popup.');
+        //     return;
+        // }
+        // this._ViewToPopup(workout);
+        // const pEL = e.target.closest('.leaflet-popup');
+        // console.log(pEL);
+
+        // if(!pEL) return;
+
+        // const popupContent = pEL.querySelector('.leaflet-popup-content');
+        // const popupID = popupContent.getAttribute('data-id');
+        // console.log(popupID);
+
+        // this.#map.on('popupopen', (e) => {
+        //     const popupContent = e.popup._contentNode.querySelector('.leaflet-popup-content');
+        //     if (!popupContent) return;
+    
+        //     popupContent.addEventListener('click', (event) => {
+        //         const workoutEl = event.target.closest('.leaflet-popup-content');
+        //         if (!workoutEl) return;
+    
+        //         const workout = this.#workouts.find(work => work.id === workoutEl.dataset.id);
+        //         if (!workout) return;
+    
+        //         this.#map.setView(workout.coords, this.#mapZoom, {
+        //             animate: true,
+        //             pan: {
+        //                 duration: 1,
+        //             },
+        //         });
+        //     });
+        // });
+
+        
         // const workout = this.#workouts.find((work) => work.id ==
         //  `leaflet-popup ${work.type}-popup ${work.id} leaflet-popup-content-wrapper` ===
         //     pEL.className)

@@ -62,7 +62,10 @@ a:visited {
   padding: 1rem 3rem 1rem 2rem;
   display: flex;
   flex-direction: column;
-  border-radius: 20px;
+  border-radius: 30px ;
+  border-top-right-radius	: 0px;
+  border-bottom-right-radius	: 0px;
+
   transition: all 0.5s ease-in-out;
 }
 
@@ -294,7 +297,9 @@ a:visited {
   z-index: 2;
   height: 100%;
   background-color: var(--color-light--1);
-  border-radius: 20px;
+  border-radius: 30px;
+  border-top-left-radius	: 0px;
+  border-bottom-left-radius	: 0px;
 }
 
 /* Popup width is defined in JS using options */
