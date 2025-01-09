@@ -149,7 +149,8 @@ class App{
             }
         });
 
-        // map.addEventListener('click', this._setMapViewtoPop.bind(this));
+        this.addhandlerSetViewtoPop(this._setMapViewtoPop.bind(this));
+
         // this.addhandlerSetViewtoPop(this._setMapViewtoPop);
         //  this._setMapViewtoPop();
     }
@@ -181,7 +182,6 @@ class App{
             }).addTo(this.#map);
 
             this.#map.on('click', this._showForm.bind(this));
-            this._setMapViewtoPop();
                 
             this.#workouts.forEach(work => {
                 this._renderWorkoutMarker(work);
@@ -390,152 +390,43 @@ class App{
             return;
 
         }
-        this.map.addEventListener('click', function(e){
-            console.log(e.target);
-            const popup = e.target.closest('.leaflet-popup');
-            console.log(popup);
-            if(!popup) return;
+        this.map.addEventListener('click', (e)=>{
+            const popupEL = e.target.closest('.leaflet-popup');
+        
+            if(!popupEL) return;
 
-            handler(popup);
+            //extract popup class name and id from the popup element
+            const popupClassList = popupEL.className.split(' ');
+            const workoutType = popupClassList.find((cls) => cls.endsWith('-popup')).replace('-popup', '');
+            const workoutId = popupClassList.find((cls) => !cls.includes('-popup') && cls !== 'leaflet-popup' && cls !== 'leaflet-zoom-animated'); //find the id of the workout from the popup element
+    
+            if (!workoutType || !workoutId) {
+                console.error('Could not extract type or id from popup className.');
+                return;
+              }
+          
+              handler(workoutId); //pass it into the handler
         })
 
     }
-    findpopup(popups, workout){
-        console.log(workout);
-        const p = popups.find(
-            (popup) => popup.className === `leaflet-popup ${workout.type}-popup ${workout.id} leaflet-zoom-animated`
-        );
-        console.log(p);
-        console.log('found popup');
-        return p;
-    }
 
+    _setMapViewtoPop(workoutId) {
 
-  _ViewToPopup(workout) {
-    if (!workout || !workout.coords) {
-        console.error('Invalid workout or workout coordinates:', workout);
-        return;
-    }
-    this.#map.setView(workout.coords, this.#mapZoom, {
-      animate: true,
-      pan: {
-        duration: 1,
-      },
-    });
-  }
-
-    _setMapViewtoPop() {
-
-        this.#map.on('popupopen', (e) => {
-            const popupContent = e.popup._contentNode.querySelector('.leaflet-popup-content');
-            if (!popupContent) return;
-
-            popupContent.addEventListener('click', (event) => {
-                const workoutEl = event.target.closest('.leaflet-popup-content');
-                if (!workoutEl) return;
-
-                const workout = this.#workouts.find(work => work.id === workoutEl.dataset.id);
-                if (!workout) return;
-
-                this.#map.setView(workout.coords, this.#mapZoom, {
-                    animate: true,
-                    pan: {
-                        duration: 1,
-                    },
-                });
-            });
+        const workout = this.#workouts.find((work) => work.id === workoutId); //find the workout popup with the given ID
+        if (!workout) {
+          console.error('No workout found for the given ID:', workoutId);
+          return;
+        }
+      
+        // Set the map view to the workout's coordinates
+        this.#map.setView(workout.coords, this.#mapZoom, {
+          animate: true,
+          pan: {
+            duration: 1,
+          },
         });
-
-        // console.log(popup);
-    
-        
-        // const workout = this.findpopup(this.#workouts, popup);
-        // if (!workout) {
-        //     console.error('No workout found for the given popup.');
-        //     return;
-        // }
-        // this._ViewToPopup(workout);
-        // const pEL = e.target.closest('.leaflet-popup');
-        // console.log(pEL);
-
-        // if(!pEL) return;
-
-        // const popupContent = pEL.querySelector('.leaflet-popup-content');
-        // const popupID = popupContent.getAttribute('data-id');
-        // console.log(popupID);
-
-        // this.#map.on('popupopen', (e) => {
-        //     const popupContent = e.popup._contentNode.querySelector('.leaflet-popup-content');
-        //     if (!popupContent) return;
-    
-        //     popupContent.addEventListener('click', (event) => {
-        //         const workoutEl = event.target.closest('.leaflet-popup-content');
-        //         if (!workoutEl) return;
-    
-        //         const workout = this.#workouts.find(work => work.id === workoutEl.dataset.id);
-        //         if (!workout) return;
-    
-        //         this.#map.setView(workout.coords, this.#mapZoom, {
-        //             animate: true,
-        //             pan: {
-        //                 duration: 1,
-        //             },
-        //         });
-        //     });
-        // });
-
-        
-        // const workout = this.#workouts.find((work) => work.id ==
-        //  `leaflet-popup ${work.type}-popup ${work.id} leaflet-popup-content-wrapper` ===
-        //     pEL.className)
-        
-        // console.log(workout);
-
-        // this.#map.setView(workout.coords, this.#mapZoom,{
-        //     animate: true,
-        //     pan:{
-        //         duration: 1,
-        //     }
-        // })
-
-
-        // const popup = document.querySelectorAll('.leaflet-popup-content');
-        // popup.forEach(pop => {
-        //     pop.addEventListener('click', function(e){
-        //         console.log('clicked', e.target.addEventListener('click', ()=>{
-
-        //             console.log('click');
-                    
-        //         }));
-        //     })
-        // })
-
-        //add event on pop so user can navigate from pop to pop
-        
-
-
-        // popup[0].addEventListener('click', function(e) {
-        //     console.log('popup clicked');
-        // });
-        // this.#map.on('popupopen', (e) => {
-        //     const popupContent = e.popup.getContent();
-        //     const popupElement = document.createElement('div');
-        //     popupElement.innerHTML = popupContent;
-    
-        //     const workoutEl = popupElement.querySelector(`.${e.popup.options.className}`);
-        //     if (!workoutEl) return;
-    
-        //     const workout = this.#workouts.find(work => work.id === workoutEl.dataset.id);
-        //     if (!workout) return;
-    
-        //     this.#map.setView(workout.coords, this.#mapZoom, {
-        //         animate: true,
-        //         pan: {
-        //             duration: 1,
-        //         },
-        //     });
-        // });
-    }    
+            
+  }    
 
     _getLocalStorage(){
         const data = JSON.parse(localStorage.getItem('workout'));
@@ -599,6 +490,7 @@ class App{
         }
         
     }
+
 
     _setLocalStorage(){
         //a very simple API --> only to be used small data, not large data...
@@ -664,8 +556,9 @@ class App{
         return p;
         
     }
-    
+
 }
+
 // _clearAllWorkouts() {
 //     this.showCard();
 // }
