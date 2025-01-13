@@ -303,6 +303,7 @@ class App{
         let html = ` 
         <li class="workout workout--${workout.type}" data-id="${workout.id}">
             <h2 class="workout__title">${workout.description}</h2>
+            <i class="fa-regular fa-pen-to-square editBtn"></i>
             <i class="fa-solid fa-trash deleteWorkoutBtn"></i>
 
             <div class="workout__details">
@@ -489,6 +490,26 @@ class App{
             console.error(err);
         }
         
+    }
+
+    _editWorkout(e){
+        //find the workout in the array
+        //edit the workout
+        //render the workout
+        //update the local storage
+
+        try{
+
+            const workout = e.target.closest('.workout');
+            if(!workout) return;
+            const workoutEl = this.#workouts.find(work => work.id === workout.dataset.id);
+
+            if(!workoutEl) return;
+            
+
+        }catch(err){
+            console.error(err);
+        }
     }
 
 
