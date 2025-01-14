@@ -1,4 +1,4 @@
-##**Mapty - Navigate your Workout**
+## 📌**Mapty - Navigate your Workout**
 
 # A user-based workout app for users to pin their cycling/running route 
 
