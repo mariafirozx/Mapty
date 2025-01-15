@@ -56,6 +56,7 @@ class Workout{
         this.coords = coords; //[lat, lng]
         this.distance = distance; //in km
         this.duration = duration; //in min 
+        
 
     }
 
@@ -120,6 +121,7 @@ class App{
     #mapEvent;
     #mapZoom = 13;
     #workouts = [];
+    #editWorkout = null;
     constructor(){
         this._getPosition();
         this.#map;
@@ -146,10 +148,14 @@ class App{
             if(e.target.classList.contains('deleteWorkoutBtn')){ 
                 //event delegation for when searching for an el thats being created dynamically --> learned in course tooo!!!!! REMEMBER !!!
                 this._showCard('deleteWorkout', e); 
+            }else if(e.target.classList.contains('editBtn')){ 
+                //event delegation for when searching for an el thats being created dynamically --> learned in course tooo!!!!! REMEMBER !!!
+                this._editWorkout(e); 
             }
         });
 
         this.addhandlerSetViewtoPop(this._setMapViewtoPop.bind(this));
+        
 
         // this.addhandlerSetViewtoPop(this._setMapViewtoPop);
         //  this._setMapViewtoPop();
@@ -224,43 +230,63 @@ class App{
     _newWorkout(e){
         e.preventDefault();
 
-
-
         const validInput = (...inputs) => inputs.every(inp => Number.isFinite(inp) );
         const posNumbers = (...inputs) => inputs.every(inp => inp>0);
         //get data from form
         const type = inputType.value;
         const distance = +inputDistance.value;
         const duration = +inputDuration.value;
-        const {lat, lng} = this.#mapEvent.latlng;
+
+        
         let workout;
 
 
+        //if editing a existing workout 
+        if(this.#editWorkout){
+            workout = this.#editWorkout;
+            workout.distance = distance;
+            workout.duration = duration;
 
-        //check if data is valid
-        //.. if activity run, create run obj
+            if(workout.type === 'running'){
+                const cadence = +inputCadence.value;
+                if(!validInput(distance, duration, cadence) || !posNumbers(distance, duration, cadence)) {
+                    return alert('Input has to be valid numbers');
+                }
+                workout.cadence = cadence;
+                workout.pace = duration / distance;
+
+            }else if(workout.type === 'cycling'){
+                const elevation = +inputElevation.value;
+                if(!validInput(distance, duration, elevation) || !posNumbers(distance, duration) ) {
+                    return alert('Input has to be valid numbers');
+                }
+                workout.elevation = elevation;
+                workout.speed = distance / (duration / 60);
+
+            }
+            workout._setDescription();
+            this.#editWorkout = null;
+        } else{
+        //create new workout if no existing
+        const {lat, lng} = this.#mapEvent.latlng;
 
         if(type === 'running'){
             const cadence = +inputCadence.value;
             // if(!Number.isFinite(distance) || !Number.isFinite(duration) || !Number.isFinite(cadence)) return alert('Input has to be +ve numbers');
             if(!validInput(distance, duration, cadence) || !posNumbers(distance, duration, cadence)) return alert('Input has to be valid numbers');
             workout = new Running([lat, lng], distance, duration, cadence);
-
-        
         }
 
         if(type === 'cycling') {
                     //.. if activity cycle, create cycle obj
-
             const elevation = +inputElevation.value;
             if(!validInput(distance, duration, elevation) || !posNumbers(distance, duration) ) return alert('Input has to be valid numbers');
             workout = new Cycling([lat, lng], distance, duration, elevation);
 
         }
-
      //add new obj to workput array
-
         this.#workouts.push(workout);
+    }
         //render workout on map as marker
 
         this._renderWorkoutMarker(workout);
@@ -497,16 +523,35 @@ class App{
         //edit the workout
         //render the workout
         //update the local storage
-
         try{
-
-            const workout = e.target.closest('.workout');
+            let workout = e.target.closest('.workout');
             if(!workout) return;
             const workoutEl = this.#workouts.find(work => work.id === workout.dataset.id);
-
+            console.log(`workout found ${workoutEl}`);
             if(!workoutEl) return;
-            
 
+            this.#editWorkout = workoutEl;
+            //edit the clicked workout
+            this._showForm();
+            //hide workout 
+
+           //populate the form with the workout data
+           inputType.value = workoutEl.type;
+           inputDistance.value = workoutEl.distance;
+           inputDuration.value = workoutEl.duration;
+
+           if(workoutEl.type === 'running'){
+
+                inputCadence.value = workoutEl.cadence;
+                inputElevation.closest('.form__row').classList.add('form__row--hidden');
+                inputCadence.closest('.form__row').classList.remove('form__row--hidden');
+
+           } else if(workoutEl.type === 'cycling'){
+
+                inputElevation.value = workoutEl.elevation;
+                inputCadence.closest('.form__row').classList.add('form__row--hidden');
+                inputElevation.closest('.form__row').classList.remove('form__row--hidden');
+           }
         }catch(err){
             console.error(err);
         }
