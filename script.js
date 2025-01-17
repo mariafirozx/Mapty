@@ -243,49 +243,63 @@ class App{
 
         //if editing a existing workout 
         if(this.#editWorkout){
-            workout = this.#editWorkout;
-            workout.distance = distance;
-            workout.duration = duration;
+            // workout = this.#editWorkout;
+            // workout.distance = distance;
+            // workout.duration = duration;
+            const {coords, id} = this.#editWorkout;
 
-            if(workout.type === 'running'){
+            if(type === 'running'){
                 const cadence = +inputCadence.value;
                 if(!validInput(distance, duration, cadence) || !posNumbers(distance, duration, cadence)) {
                     return alert('Input has to be valid numbers');
                 }
-                workout.cadence = cadence;
-                workout.pace = duration / distance;
+                // workout.cadence = cadence;
+                // workout.pace = duration / distance;
+                workout = new Running(coords, distance, duration, cadence);
 
-            }else if(workout.type === 'cycling'){
+            }else if(type === 'cycling'){
                 const elevation = +inputElevation.value;
                 if(!validInput(distance, duration, elevation) || !posNumbers(distance, duration) ) {
                     return alert('Input has to be valid numbers');
                 }
-                workout.elevation = elevation;
-                workout.speed = distance / (duration / 60);
+                // workout.elevation = elevation;
+                // workout.speed = distance / (duration / 60);
+                workout = new Cycling(coords, distance, duration, elevation);
 
             }
-            workout._setDescription();
+            // workout._setDescription();
+            // this.#editWorkout = null;
+            workout.id = id;
+            workout.date = this.#editWorkout.date;
+            const i = this.#workouts.findIndex(work => work.id === id);
+            this.#workouts[i] = workout;
+            //update UI
+            // setTimeout(() => {
+            //     document.querySelector(`.workout[data-id="${id}"]`).remove();
+            // }, 2.5 * 1000);
+
+            document.querySelector(`.workout[data-id="${id}"]`).remove(); //remove the old one from UI and render the new one
             this.#editWorkout = null;
         } else{
         //create new workout if no existing
-        const {lat, lng} = this.#mapEvent.latlng;
+            const {lat, lng} = this.#mapEvent.latlng;
 
-        if(type === 'running'){
-            const cadence = +inputCadence.value;
-            // if(!Number.isFinite(distance) || !Number.isFinite(duration) || !Number.isFinite(cadence)) return alert('Input has to be +ve numbers');
-            if(!validInput(distance, duration, cadence) || !posNumbers(distance, duration, cadence)) return alert('Input has to be valid numbers');
-            workout = new Running([lat, lng], distance, duration, cadence);
-        }
+            if(type === 'running'){
+                const cadence = +inputCadence.value;
+                // if(!Number.isFinite(distance) || !Number.isFinite(duration) || !Number.isFinite(cadence)) return alert('Input has to be +ve numbers');
+                if(!validInput(distance, duration, cadence) || !posNumbers(distance, duration, cadence)) return alert('Input has to be valid numbers');
+                workout = new Running([lat, lng], distance, duration, cadence);
+            }
 
-        if(type === 'cycling') {
-                    //.. if activity cycle, create cycle obj
-            const elevation = +inputElevation.value;
-            if(!validInput(distance, duration, elevation) || !posNumbers(distance, duration) ) return alert('Input has to be valid numbers');
-            workout = new Cycling([lat, lng], distance, duration, elevation);
+            if(type === 'cycling') {
+                        //.. if activity cycle, create cycle obj
+                const elevation = +inputElevation.value;
+                if(!validInput(distance, duration, elevation) || !posNumbers(distance, duration) ) return alert('Input has to be valid numbers');
+                workout = new Cycling([lat, lng], distance, duration, elevation);
 
-        }
-     //add new obj to workput array
-        this.#workouts.push(workout);
+            }
+        //add new obj to workput array
+            this.#workouts.push(workout);
     }
         //render workout on map as marker
 
