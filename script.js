@@ -11,6 +11,7 @@
 
 const form = document.querySelector('.form');
 const containerWorkouts = document.querySelector('.workouts');
+const sidebar = document.querySelector('.sidebar');
 const inputType = document.querySelector('.form__input--type');
 const inputDistance = document.querySelector('.form__input--distance');
 const inputDuration = document.querySelector('.form__input--duration');
@@ -156,6 +157,13 @@ class App{
 
         this.addhandlerSetViewtoPop(this._setMapViewtoPop.bind(this));
         
+        // sidebar.addEventListener('click', (e)=>{
+        //     //hide form if open
+        //     // if(e.target.classList.contains('form')) return;
+            
+        //     this.toggleWindow('formClear');
+        // });
+        
 
         // this.addhandlerSetViewtoPop(this._setMapViewtoPop);
         //  this._setMapViewtoPop();
@@ -207,6 +215,16 @@ class App{
         this.#mapEvent = mapE;
         form.classList.remove('hidden');
         inputDistance.focus();
+
+    //     sidebar.addEventListener('click', function(e){
+            
+    //         form.style.display = 'none';
+    //         form.classList.add('hidden');
+        
+
+    // });
+
+
     
     }
 
@@ -217,6 +235,8 @@ class App{
         form.style.display = 'none';
         form.classList.add('hidden');
         setTimeout(() => (form.style.display = 'grid'),1000);
+
+        
     }
 
     _toggleElevationField(){
@@ -237,9 +257,7 @@ class App{
         const distance = +inputDistance.value;
         const duration = +inputDuration.value;
 
-        
         let workout;
-
 
         //if editing a existing workout 
         if(this.#editWorkout){
@@ -253,8 +271,6 @@ class App{
                 if(!validInput(distance, duration, cadence) || !posNumbers(distance, duration, cadence)) {
                     return alert('Input has to be valid numbers');
                 }
-                // workout.cadence = cadence;
-                // workout.pace = duration / distance;
                 workout = new Running(coords, distance, duration, cadence);
 
             }else if(type === 'cycling'){
@@ -335,6 +351,21 @@ class App{
 
            workout.markerId = marker._leaflet_id;
 
+        //create a polyline for the workout on the  marker icon
+        
+        const latlngs = [
+            this.#workouts.map(work => work.coords)
+        
+        ];
+
+        // const polyline = L.polygon(latlngs, {color: 'green',
+        //     noClip: true,
+        //     smoothFactor: 0.3,
+        //     weight: 2,
+        //     // distanceMarkers: true,
+        // }).addTo(this.#map);
+        // this.#map.fitBounds(polyline.getBounds());
+
            //${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.description}
 
     }
@@ -399,7 +430,6 @@ class App{
         // const deleteWorkoutBtn = document.querySelector('.deleteWorkoutBtn');
         // deleteWorkoutBtn.addEventListener('click', _showCard('deleteWorkout'));
     }
-
 
     _moveToPop(e){
 
@@ -591,6 +621,28 @@ class App{
         location.reload();
     }
 
+    toggleWindow(action){
+
+        if(action === 'cardClear'){
+            clearAllCard.classList.toggle('hide');
+            overlay.classList.toggle('hide');
+
+        }
+        if(action === 'formClear'){
+            if(form.classList.contains('hidden')) return;
+
+            else{
+                form.style.display = 'none';
+                form.classList.add('hidden');
+            }
+            //hide form if open
+            
+            
+        }
+        // clearAllCard.classList.toggle('hide');
+        // overlay.classList.toggle('hide');
+    }
+
     _showCard(action, e){
 
         //if no workouts
@@ -598,10 +650,15 @@ class App{
         if(localStorage.length === 0 && !this.#workouts) return;
     
         
-        clearAllCard.classList.remove('hide');
-        overlay.classList.remove('hide');
+        // clearAllCard.classList.remove('hide');
+        // overlay.classList.remove('hide');
+        this.toggleWindow('cardClear');
+
+        confirmBtn.removeEventListener('click', this._confirmHandler);
+        noBtn.removeEventListener('click', this._noHandler);
+        overlay.removeEventListener('click', this._overlayHandler);
     
-        confirmBtn.addEventListener('click', ()=>{ //arrow function to bind this keyword; use arrow when error is not a function !!!!
+        this._confirmHandler = ()=>{ //arrow function to bind this keyword; use arrow when error is not a function !!!!
             if(action === 'clearAll'){
                  app.reset();
             }
@@ -609,18 +666,28 @@ class App{
                this._deleteWorkout(e);
 
             }
-            clearAllCard.classList.add('hide');
-            overlay.classList.add('hide');
-        })
+            // clearAllCard.classList.toggle('hide');
+            // overlay.classList.toggle('hide');
+            this.toggleWindow('cardClear');
+        }
 
+        this._noHandler = ()=>{
+                // clearAllCard.classList.toggle('hide');
+                // overlay.classList.toggle('hide');
+                this.toggleWindow('cardClear');
+        }
 
+        this._overlayHandler = ()=>{
 
-        noBtn.addEventListener('click', function(){
-                clearAllCard.classList.add('hide');
-                overlay.classList.add('hide');
-        }) 
-    
+            this.toggleWindow('cardClear');
+
+        };
+
+        confirmBtn.addEventListener('click', this._confirmHandler);
+        noBtn.addEventListener('click', this._noHandler);
+        overlay.addEventListener('click', this._overlayHandler);
     }
+
     
 
     _clearAllWorkouts() {
