@@ -11,7 +11,7 @@
 
 const form = document.querySelector('.form');
 const containerWorkouts = document.querySelector('.workouts');
-const sidebar = document.querySelector('.sidebar');
+const sidebar = document.querySelector('.side');
 const inputType = document.querySelector('.form__input--type');
 const inputDistance = document.querySelector('.form__input--distance');
 const inputDuration = document.querySelector('.form__input--duration');
@@ -157,6 +157,18 @@ class App{
 
         this.addhandlerSetViewtoPop(this._setMapViewtoPop.bind(this));
         
+        document.addEventListener('DOMContentLoaded', ()=>{
+            sidebar.addEventListener('click', (e)=>{
+                if(e.target === sidebar){
+                    this.toggleWindow('formClear');
+
+                }
+                //hide form if open
+                // if(e.target.classList.contains('form')) return;
+                
+                
+            });
+        });
         // sidebar.addEventListener('click', (e)=>{
         //     //hide form if open
         //     // if(e.target.classList.contains('form')) return;
@@ -629,12 +641,14 @@ class App{
 
         }
         if(action === 'formClear'){
-            if(form.classList.contains('hidden')) return;
-
-            else{
-                form.style.display = 'none';
-                form.classList.add('hidden');
+            if(!form.classList.contains('hidden')){
+                form.classList.toggle('hidden');
+    
             }
+           
+                // form.style.display = 'none';
+                // form.classList.add('hidden');
+            
             //hide form if open
             
             
@@ -743,3 +757,7 @@ const app = new App();
 
 //8. using thirdparty api geocode location from coordinates 
 //9. display weather conditions
+
+//NEW FEATURE : display weather conditions for the workout time and place
+//user inputs the workout time and place and the weather conditions are displayed
+//user inputs destination start point and end point n shows the fastest route
