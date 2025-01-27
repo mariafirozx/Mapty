@@ -218,10 +218,10 @@ class App{
                 e.preventDefault();
         
                 if(username.value === user && password.value === pass ){
-                    logRegPage.style.display ='none';
-                    main.style.display = 'flex';
+                    logRegPage.classList.toggle('hide');
+                    main.classList.toggle('hide');
                 }else{
-                   alert('invalid user and pass!');
+                    alert('invalid username & password!');
                 }
                
     

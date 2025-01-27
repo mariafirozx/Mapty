@@ -21,6 +21,9 @@
     <title>Mapty</title>
   </head> 
   <body>
+
+  <section class="first"> 
+
     <div class="logRegPage">
       <div class="nav">
         <img src="logo.png" alt="Logo" class="logo" />
@@ -60,144 +63,150 @@
         
       </svg>
     </div>
+  
+  </section>
     
 
-  <div class="main-page hide ">
-    <div class="sidebar side">
-      <img src="logo.png" alt="Logo" class="logo" />
-      <div class="buttons">
-        <button class="deleteAll hide">Clear All</button>
-      </div>
-      <p class="msg"><i class="fa-regular fa-face-smile"></i> Start logging your workouts by pinning on the map!</p>
 
-      <div class="spinner hidden">
-        <svg>
-          <use href="icons.svg#icon-loader"></use>
-        </svg>
-      </div>
-      <ul class="workouts">
-        <form class="form hidden">
-          <div class="form__row">
-            <label class="form__label">Type</label>
-            <select class="form__input form__input--type">
-              <option value="running">Running</option>
-              <option value="cycling">Cycling</option>
-            </select>
-          </div>
-          <div class="form__row">
-            <label class="form__label">Distance</label>
-            <input class="form__input form__input--distance" placeholder="km" />
-          </div>
-          <div class="form__row">
-            <label class="form__label">Duration</label>
-            <input
-              class="form__input form__input--duration"
-              placeholder="min"
-            />
-          </div>
-          <div class="form__row">
-            <label class="form__label">Cadence</label>
-            <input
-              class="form__input form__input--cadence"
-              placeholder="step/min"
-            />
-          </div>
-          <div class="form__row form__row--hidden">
-            <label class="form__label">Elev Gain</label>
-            <input
-              class="form__input form__input--elevation"
-              placeholder="meters"
-            />
-          </div>
-          <div class="form__row">
-            <label class="form__label">Date</label>
-            <input type="date" class="form__input form__input--date">
-          </div>
-          <button class="form__btn">OK</button>
-        </form>
+  <section class="second">
+
+    <div class="main-page hide ">
+      <div class="sidebar side">
+        <img src="logo.png" alt="Logo" class="logo" />
+        <div class="buttons">
+          <button class="deleteAll hide">Clear All</button>
+        </div>
+        <p class="msg"><i class="fa-regular fa-face-smile"></i> Start logging your workouts by pinning on the map!</p>
+
+        <div class="spinner hidden">
+          <svg>
+            <use href="icons.svg#icon-loader"></use>
+          </svg>
+        </div>
+        <ul class="workouts">
+          <form class="form hidden">
+            <div class="form__row">
+              <label class="form__label">Type</label>
+              <select class="form__input form__input--type">
+                <option value="running">Running</option>
+                <option value="cycling">Cycling</option>
+              </select>
+            </div>
+            <div class="form__row">
+              <label class="form__label">Distance</label>
+              <input class="form__input form__input--distance" placeholder="km" />
+            </div>
+            <div class="form__row">
+              <label class="form__label">Duration</label>
+              <input
+                class="form__input form__input--duration"
+                placeholder="min"
+              />
+            </div>
+            <div class="form__row">
+              <label class="form__label">Cadence</label>
+              <input
+                class="form__input form__input--cadence"
+                placeholder="step/min"
+              />
+            </div>
+            <div class="form__row form__row--hidden">
+              <label class="form__label">Elev Gain</label>
+              <input
+                class="form__input form__input--elevation"
+                placeholder="meters"
+              />
+            </div>
+            <div class="form__row">
+              <label class="form__label">Date</label>
+              <input type="date" class="form__input form__input--date">
+            </div>
+            <button class="form__btn">OK</button>
+          </form>
 
 
+          
         
-       
 
-        <!-- <li class="workout workout--running" data-id="1234567890">
-          <h2 class="workout__title">Running on April 14</h2>   
-          <i class="fa-solid fa-trash deleteWorkoutBtn"></i>
-      
-          <div class="workout__details">
-            <span class="workout__icon">🏃‍♂️</span>
-            <span class="workout__value">5.2</span>
-            <span class="workout__unit">km</span>
-          </div>
-          <div class="workout__details">
-            <span class="workout__icon">⏱</span>
-            <span class="workout__value">24</span>
-            <span class="workout__unit">min</span>
-          </div>
-          <div class="workout__details">
-            <span class="workout__icon">⚡️</span>
-            <span class="workout__value">4.6</span>
-            <span class="workout__unit">min/km</span>
-          </div>
-          <div class="workout__details">
-            <span class="workout__icon">🦶🏼</span>
-            <span class="workout__value">178</span>
-            <span class="workout__unit">spm</span>
-          </div>
-        </li>
+          <!-- <li class="workout workout--running" data-id="1234567890">
+            <h2 class="workout__title">Running on April 14</h2>   
+            <i class="fa-solid fa-trash deleteWorkoutBtn"></i>
+        
+            <div class="workout__details">
+              <span class="workout__icon">🏃‍♂️</span>
+              <span class="workout__value">5.2</span>
+              <span class="workout__unit">km</span>
+            </div>
+            <div class="workout__details">
+              <span class="workout__icon">⏱</span>
+              <span class="workout__value">24</span>
+              <span class="workout__unit">min</span>
+            </div>
+            <div class="workout__details">
+              <span class="workout__icon">⚡️</span>
+              <span class="workout__value">4.6</span>
+              <span class="workout__unit">min/km</span>
+            </div>
+            <div class="workout__details">
+              <span class="workout__icon">🦶🏼</span>
+              <span class="workout__value">178</span>
+              <span class="workout__unit">spm</span>
+            </div>
+          </li>
 
-        <li class="workout workout--cycling" data-id="1234567891">
-          <h2 class="workout__title">Cycling on April 5</h2>
-          <div class="workout__details">
-            <span class="workout__icon">🚴‍♀️</span>
-            <span class="workout__value">27</span>
-            <span class="workout__unit">km</span>
-          </div>
-          <div class="workout__details">
-            <span class="workout__icon">⏱</span>
-            <span class="workout__value">95</span>
-            <span class="workout__unit">min</span>
-          </div>
-          <div class="workout__details">
-            <span class="workout__icon">⚡️</span>
-            <span class="workout__value">16</span>
-            <span class="workout__unit">km/h</span>
-          </div>
-          <div class="workout__details">
-            <span class="workout__icon">⛰</span>
-            <span class="workout__value">223</span>
-            <span class="workout__unit">m</span>
-          </div>
-        </li> -->
-      </ul>
+          <li class="workout workout--cycling" data-id="1234567891">
+            <h2 class="workout__title">Cycling on April 5</h2>
+            <div class="workout__details">
+              <span class="workout__icon">🚴‍♀️</span>
+              <span class="workout__value">27</span>
+              <span class="workout__unit">km</span>
+            </div>
+            <div class="workout__details">
+              <span class="workout__icon">⏱</span>
+              <span class="workout__value">95</span>
+              <span class="workout__unit">min</span>
+            </div>
+            <div class="workout__details">
+              <span class="workout__icon">⚡️</span>
+              <span class="workout__value">16</span>
+              <span class="workout__unit">km/h</span>
+            </div>
+            <div class="workout__details">
+              <span class="workout__icon">⛰</span>
+              <span class="workout__value">223</span>
+              <span class="workout__unit">m</span>
+            </div>
+          </li> -->
+        </ul>
 
-      <!-- <p class="copyright">
-        &copy; Copyright by
-        <a
-          class="twitter-link"
-          target="_blank"
-          href="https://twitter.com/jonasschmedtman"
-          >Jonas Schmedtmann</a
-        >. Use for learning or your portfolio. Don't use to teach. Don't claim
-        as your own.
-      </p> -->
-    </div>
-
-    <div class="deleteAllCard hide">
-      <img class= "warnIcon" src="warning (1).png">
-      <p class="heading">Delete Your Workout</p>
-      <p class="desc"> Are you sure you want to delete your workout log? 
-        <br>This action cannot be undone.</p>
-      <div class="btnContainer">
-        <button class="confirmBtn">Confirm</button>
-        <button class="noBtn">go back</button>
+        <!-- <p class="copyright">
+          &copy; Copyright by
+          <a
+            class="twitter-link"
+            target="_blank"
+            href="https://twitter.com/jonasschmedtman"
+            >Jonas Schmedtmann</a
+          >. Use for learning or your portfolio. Don't use to teach. Don't claim
+          as your own.
+        </p> -->
       </div>
 
+      <div class="deleteAllCard hide">
+        <img class= "warnIcon" src="warning (1).png">
+        <p class="heading">Delete Your Workout</p>
+        <p class="desc"> Are you sure you want to delete your workout log? 
+          <br>This action cannot be undone.</p>
+        <div class="btnContainer">
+          <button class="confirmBtn">Confirm</button>
+          <button class="noBtn">go back</button>
+        </div>
+
+      </div>
+
+      <div id="map"></div>
+      <div class="overlay hide "></div>
+
     </div>
-
-    <div id="map"></div>
-    <div class="overlay hide "></div>
-
-  </div>
+  </section>
   </body>
 </html>
