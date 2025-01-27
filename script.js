@@ -17,8 +17,12 @@ const inputDistance = document.querySelector('.form__input--distance');
 const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
+const inputDate = document.querySelector('.form__input--date');
 const msg = document.querySelector('.msg');
 const map = document.querySelector('#map');
+const spinner = document.querySelector('.spinner');
+const logRegPage = document.querySelector('.logRegPage');
+const main = document.querySelector('.main-page');
 
 //buttons
 
@@ -27,8 +31,9 @@ const clearAllCard = document.querySelector('.deleteAllCard');
 const overlay = document.querySelector('.overlay');
 const confirmBtn = document.querySelector('.confirmBtn');
 const noBtn = document.querySelector('.noBtn');
+const logBtn = document.querySelector('.btn');
 
-
+const loginForm = document.querySelector('._form');
 // using geolocation API --browser
 
 // display map using leaflet lib
@@ -46,10 +51,23 @@ const noBtn = document.querySelector('.noBtn');
 
 
 
+class loginAndReg{
+
+
+}
+
+
+
+
+
+
+
+
 
 class Workout{
+    dateInput = inputDate.value;
 
-    date = new Date();
+    date = new Date(this.dateInput);
     id = Date.now() + ''.slice(-10);
     clicks = 0;
     
@@ -116,6 +134,9 @@ class Cycling extends Workout{
 
 class App{
 
+
+
+
     map = document.querySelector('#map');
 
     #map; 
@@ -124,6 +145,12 @@ class App{
     #workouts = [];
     #editWorkout = null;
     constructor(){
+
+        loginForm.addEventListener('submit', this._loginRender());
+
+        // this._loginRender();
+
+
         this._getPosition();
         this.#map;
         this.#mapEvent;
@@ -135,12 +162,7 @@ class App{
         //attach event handlers
 
         form.addEventListener('submit', this._newWorkout.bind(this));
-            //....display marker once user submit the form
-            // console.log(mapEvent);
-    
-         //clear input field
-
-         inputType.addEventListener('change', this._toggleElevationField);
+        inputType.addEventListener('change', this._toggleElevationField);
             //makes sure one of them is hidden when other is clicked 
             
         containerWorkouts.addEventListener('click', this._moveToPop.bind(this)); 
@@ -181,6 +203,36 @@ class App{
         //  this._setMapViewtoPop();
     }
 
+
+
+    _loginRender(){
+
+        let user = 'zahra';
+        let pass = '786786';
+
+        const username = document.getElementById('username');
+        const password = document.getElementById('pass');
+
+        document.addEventListener('DOMContentLoaded', () =>{
+            logBtn.addEventListener('click',(e)=>{
+                e.preventDefault();
+        
+                if(username.value === user && password.value === pass ){
+                    logRegPage.style.display ='none';
+                    main.style.display = 'flex';
+                }else{
+                   alert('invalid user and pass!');
+                }
+               
+    
+            })
+
+        })
+
+
+       
+
+    }
     _getPosition(){
 
         //using bind since this keyword is undefined in a reg function, and loadMap here is reg function
@@ -226,18 +278,7 @@ class App{
         msg.classList.add('hide');
         this.#mapEvent = mapE;
         form.classList.remove('hidden');
-        inputDistance.focus();
-
-    //     sidebar.addEventListener('click', function(e){
-            
-    //         form.style.display = 'none';
-    //         form.classList.add('hidden');
-        
-
-    // });
-
-
-    
+        inputDistance.focus();    
     }
 
     _hideform(){
@@ -248,7 +289,6 @@ class App{
         form.classList.add('hidden');
         setTimeout(() => (form.style.display = 'grid'),1000);
 
-        
     }
 
     _toggleElevationField(){
@@ -261,18 +301,24 @@ class App{
 
     _newWorkout(e){
         e.preventDefault();
-
+    
         const validInput = (...inputs) => inputs.every(inp => Number.isFinite(inp) );
         const posNumbers = (...inputs) => inputs.every(inp => inp>0);
         //get data from form
         const type = inputType.value;
         const distance = +inputDistance.value;
         const duration = +inputDuration.value;
+        const date = inputDate.value;
+        console.log(date);
 
+        
         let workout;
 
         //if editing a existing workout 
         if(this.#editWorkout){
+
+            // this.toggleWindow('RenderSpinner')
+
             // workout = this.#editWorkout;
             // workout.distance = distance;
             // workout.duration = duration;
@@ -308,6 +354,7 @@ class App{
 
             document.querySelector(`.workout[data-id="${id}"]`).remove(); //remove the old one from UI and render the new one
             this.#editWorkout = null;
+            // this.toggleWindow('RenderSpinner')
         } else{
         //create new workout if no existing
             const {lat, lng} = this.#mapEvent.latlng;
@@ -564,7 +611,7 @@ class App{
            if(marker) this.#map.removeLayer(marker);
         //    this._findpopup(marker, workout).remove();
             
-            
+        location.reload();
             
         // //reset map
         // this.#map.removeLayer(workout);
@@ -649,12 +696,12 @@ class App{
                 // form.style.display = 'none';
                 // form.classList.add('hidden');
             
-            //hide form if open
-            
-            
+            //hide form if open 
         }
-        // clearAllCard.classList.toggle('hide');
-        // overlay.classList.toggle('hide');
+        if(action === 'RenderSpinner'){
+            spinner.classList.toggle('hidden');
+        }
+       
     }
 
     _showCard(action, e){
@@ -759,5 +806,6 @@ const app = new App();
 //9. display weather conditions
 
 //NEW FEATURE : display weather conditions for the workout time and place
-//user inputs the workout time and place and the weather conditions are displayed
-//user inputs destination start point and end point n shows the fastest route
+//              user inputs the workout time and place and the weather conditions are displayed
+//              user inputs destination start point and end point n shows the fastest route
+//              LOGIN && REGISTER
