@@ -103,26 +103,45 @@ html {
   display: block;
 }
 .wrapper{
-  width: 420px;
+  position: relative;
+  width: 440px;
+  height: 420px;
   background: transparent;
   backdrop-filter: blur(20px);
   box-shadow: 0 0 10px rgb(25, 89, 143);
   border: 2px solid rgba(255, 255, 255, .2);
   color: #fff;
   border-radius: 10px;
-  padding: 30px 40px;
   z-index: 999;
   margin-left: 26em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
 }
-.wrapper h1{
+
+.wrapper.active{
+
+}
+
+.wrapper .form-box{
+  width: 100%;
+  padding: 40px;
+}
+
+
+h1{
   font-family: "Josefin Sans", serif;
+  /* color: #095833; */
+  color: var(--color-dark--1);
+
+  font-weight: 500;
 
   font-size: 36px;
   text-align: center;
 }
 
-.wrapper .input-box{
+.input-box{
   position: relative;
   width: 100%;
   height: 50px;
@@ -162,12 +181,18 @@ html {
   margin: -15px 0 15px;
 }
 .remember-forgot label input{
-  accent-color: #fff;
+  accent-color: #095833;
+
   margin-right: 3px;
 }
+.remember-forgot label{
+  color: var(--color-dark--1);
+  font-weight: 600;
+}
 .remember-forgot a{
-  color: #fff !important;
+  color: var(--color-dark--1) !important;
   text-decoration: none;
+  font-weight: 600;
 }
 .remember-forgot a:hover{
   text-decoration: underline;
@@ -178,7 +203,7 @@ html {
   background: #fff;
   border: none;
   outline: none;
-  border-radius: 40px;
+  border-radius: 15px;
   box-shadow: 0 0 10px rgba(0, 0, 0, .1);
   cursor: pointer;
   font-size: 18px;
@@ -188,7 +213,8 @@ html {
 }
 
 .btn:hover{
-  background: var(--color-brand--1);
+  background: var(--color-dark--1);
+  color: #fff;
   transition: .3s ease-out;
 }
 .wrapper .register-link{
@@ -197,15 +223,21 @@ html {
   margin: 20px 0 15px;
 }
 .register-link p a{
-  color: #fff;
+  color: var(--color-dark--1);
   text-decoration: none;
   font-weight: 600;
 }
 .register-link a:hover{
-  color: var(--color-brand--1);
+  color: var(--color-dark--2);
 }
 
-
+.wrapper ._form-box.login{
+  /* display: none; */
+}
+.wrapper ._form-box.register{
+  position: absolute;
+  transform: translateX(400px);
+}
 
 /* ----------------------------*/
 .main-page{

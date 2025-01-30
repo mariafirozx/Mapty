@@ -4,8 +4,14 @@
  */
 
 
+
+
+
 'use strict';
 
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+const supabase = createClient("https://wrmulptnhbswyebikglj.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndybXVscHRuaGJzd3llYmlrZ2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc2MjkwMDYsImV4cCI6MjA1MzIwNTAwNn0.oisfRVLENbj0A2W3GMj4FVQyiNyshR-Exb1xewl6olk");
 // // prettier-ignore
 // const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -23,6 +29,8 @@ const map = document.querySelector('#map');
 const spinner = document.querySelector('.spinner');
 const logRegPage = document.querySelector('.logRegPage');
 const main = document.querySelector('.main-page');
+const username = document.getElementById('username');
+const password = document.getElementById('pass');
 
 //buttons
 
@@ -48,19 +56,6 @@ const loginForm = document.querySelector('._form');
 
 //find popup classname
 //find marker classname
-
-
-
-class loginAndReg{
-
-
-}
-
-
-
-
-
-
 
 
 
@@ -210,29 +205,44 @@ class App{
         let user = 'zahra';
         let pass = '786786';
 
-        const username = document.getElementById('username');
-        const password = document.getElementById('pass');
+        // const username = document.getElementById('username');
+        // const password = document.getElementById('pass');
 
         document.addEventListener('DOMContentLoaded', () =>{
             logBtn.addEventListener('click',(e)=>{
                 e.preventDefault();
         
-                if(username.value === user && password.value === pass ){
-                    logRegPage.classList.toggle('hide');
-                    main.classList.toggle('hide');
-                }else{
-                    alert('invalid username & password!');
-                }
+                this._userAuth();
+                // if(username.value === user && password.value === pass ){
+                    // logRegPage.classList.toggle('hide');
+                    // main.classList.toggle('hide');
+                // }else{
+                //     alert('invalid username & password!');
+                // }
                
     
             })
 
         })
 
-
-       
-
     }
+
+   async _userAuth(){
+        let {data, error} = await supabase.auth.signUp({
+
+            email: username.value,
+            password: password.value
+
+    })
+        if(error) console.error(error);
+        console.log(data);
+
+        //create user database //INSERT 
+    const {err} = await supabase
+    .from('users')
+    .insert({email: username.value, password: password.value})
+
+ }
     _getPosition(){
 
         //using bind since this keyword is undefined in a reg function, and loadMap here is reg function
