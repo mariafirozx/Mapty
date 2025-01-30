@@ -109,7 +109,7 @@ html {
   background: transparent;
   backdrop-filter: blur(20px);
   box-shadow: 0 0 10px rgb(25, 89, 143);
-  border: 2px solid rgba(255, 255, 255, .2);
+  border: .1px solid rgba(255, 255, 255, .2);
   color: #fff;
   border-radius: 10px;
   z-index: 999;
@@ -117,16 +117,19 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: height 1s ease;
 
+  overflow: hidden;
 }
 
 .wrapper.active{
+  height: 520px;
 
 }
 
 .wrapper .form-box{
   width: 100%;
-  padding: 40px;
+  padding: 47px;
 }
 
 
@@ -135,6 +138,7 @@ h1{
   /* color: #095833; */
   color: var(--color-dark--1);
 
+  /* color: #fff; */
   font-weight: 500;
 
   font-size: 36px;
@@ -143,8 +147,10 @@ h1{
 
 .input-box{
   position: relative;
-  width: 100%;
+  width: 119%;
   height: 50px;
+  align-items: center;
+  right: 2em;
   /* background: var(--color-dark--2); */
   margin: 30px 0;
 }
@@ -207,7 +213,7 @@ h1{
   box-shadow: 0 0 10px rgba(0, 0, 0, .1);
   cursor: pointer;
   font-size: 18px;
-  
+  left: 5em;
   color: var(--color-dark--1);
   font-weight: 600;
 }
@@ -226,17 +232,32 @@ h1{
   color: var(--color-dark--1);
   text-decoration: none;
   font-weight: 600;
+  gap: 2px;
 }
 .register-link a:hover{
   color: var(--color-dark--2);
 }
 
 .wrapper ._form-box.login{
+  transition: transform .18s ease;
+  transform: translateX(0);
   /* display: none; */
+}
+.wrapper.active ._form-box.login{
+  transition: none;
+  transform: translateX(-400px);
+
 }
 .wrapper ._form-box.register{
   position: absolute;
+  transition: none;
   transform: translateX(400px);
+}
+
+.wrapper.active ._form-box.register{
+  transition: transform .18s ease;
+  transform: translateX(0);
+
 }
 
 /* ----------------------------*/

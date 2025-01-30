@@ -197,9 +197,6 @@ class App{
         // this.addhandlerSetViewtoPop(this._setMapViewtoPop);
         //  this._setMapViewtoPop();
     }
-
-
-
     _loginRender(){
 
         let user = 'zahra';
