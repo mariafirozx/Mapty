@@ -4,7 +4,7 @@
  */
 
 
-
+import {wrapper} from './logRegisterView.js';
 
 
 'use strict';
@@ -27,10 +27,21 @@ const inputDate = document.querySelector('.form__input--date');
 const msg = document.querySelector('.msg');
 const map = document.querySelector('#map');
 const spinner = document.querySelector('.spinner');
+
+//login&registerForm --> main page
 const logRegPage = document.querySelector('.logRegPage');
 const main = document.querySelector('.main-page');
-const username = document.getElementById('username');
+
+
+//login form
+const username = document.getElementById('email');
 const password = document.getElementById('pass');
+
+
+//register form
+const regUsername = document.getElementById('username');
+const regPass = document.getElementById('pass_reg');
+const regEmail = document.getElementById('email_reg');
 
 //buttons
 
@@ -39,9 +50,11 @@ const clearAllCard = document.querySelector('.deleteAllCard');
 const overlay = document.querySelector('.overlay');
 const confirmBtn = document.querySelector('.confirmBtn');
 const noBtn = document.querySelector('.noBtn');
-const logBtn = document.querySelector('.btn');
+const logBtn = document.querySelector('.login');
+const regBtn = document.getElementById('register-btn');
 
-const loginForm = document.querySelector('._form');
+const loginForm = document.getElementById('form-log');
+const regForm = document.getElementById('form-reg');
 // using geolocation API --browser
 
 // display map using leaflet lib
@@ -129,9 +142,6 @@ class Cycling extends Workout{
 
 class App{
 
-
-
-
     map = document.querySelector('#map');
 
     #map; 
@@ -141,7 +151,26 @@ class App{
     #editWorkout = null;
     constructor(){
 
-        loginForm.addEventListener('submit', this._loginRender());
+        this._registerRender();
+
+
+        // if(regForm){
+        //     regForm.addEventListener('submit', (e)=>{
+        //         this._registerRender();
+                
+
+        //     })
+
+        // }
+
+        // regForm.addEventListener('submit', (e)=>{
+        //     console.log('form clicked');
+        // })
+
+        
+        
+
+       
 
         // this._loginRender();
 
@@ -197,47 +226,124 @@ class App{
         // this.addhandlerSetViewtoPop(this._setMapViewtoPop);
         //  this._setMapViewtoPop();
     }
+
+    _registerRender(){
+
+        try{
+                regBtn.addEventListener('click',(e)=>{
+                    e.preventDefault();
+
+                    if( !regEmail.value || !regUsername.value || !regPass.value){
+                        alert('Please fill in all fields');
+                        
+                        
+                    }else{
+                        this._userReg();
+                        
+                        // this.toggleWindow('RenderSpinner'); //show spinner
+
+                        setTimeout(() => {
+                            this.toggleWindow('RenderSpinner');
+                        }, 2.5 * 1000);
+                        wrapper.classList.remove('active');
+
+                        // logRegPage.classList.toggle('hide');
+                        // main.classList.toggle('hide');
+                        
+                        
+                    }
+                
+                })
+            
+
+        }catch(err){console.error(err)}
+    }
+
+
     _loginRender(){
 
-        let user = 'zahra';
-        let pass = '786786';
+        // let user = 'zahra';
+        // let pass = '786786';
 
-        // const username = document.getElementById('username');
-        // const password = document.getElementById('pass');
+        // // const username = document.getElementById('username');
+        // // const password = document.getElementById('pass');
 
-        document.addEventListener('DOMContentLoaded', () =>{
-            logBtn.addEventListener('click',(e)=>{
-                e.preventDefault();
+        // document.addEventListener('DOMContentLoaded', () =>{
+        //     logBtn.addEventListener('click',(e)=>{
+        //         e.preventDefault();
         
-                this._userAuth();
-                // if(username.value === user && password.value === pass ){
-                    // logRegPage.classList.toggle('hide');
-                    // main.classList.toggle('hide');
-                // }else{
-                //     alert('invalid username & password!');
-                // }
+        //         this._userAuth();
+        //         // if(username.value === user && password.value === pass ){
+        //             // logRegPage.classList.toggle('hide');
+        //             // main.classList.toggle('hide');
+        //         // }else{
+        //         //     alert('invalid username & password!');
+        //         // }
                
     
-            })
+        //     })
 
-        })
+        // })
 
     }
 
-   async _userAuth(){
+    async _userReg(){
+
+    try{
+
+        const email = regEmail.value;
+        const username = regUsername.value;
+        const password = regPass.value;
+
+
+        if (!email || !password || !username) {
+            alert('Please fill in all fields.');
+            return;
+        }
+
         let {data, error} = await supabase.auth.signUp({
 
-            email: username.value,
-            password: password.value
+                email,
+                password
 
-    })
-        if(error) console.error(error);
-        console.log(data);
+        })
+        if (error) {
+            console.error('Signup error:', error.message);
+            alert(`Signup failed: ${error.message}`);
+        }else{
 
-        //create user database //INSERT 
-    const {err} = await supabase
-    .from('users')
-    .insert({email: username.value, password: password.value})
+            //success msg container
+            alert('User created successfully');
+        }
+
+            //create user database //INSERT 
+        const {err: insertErr} = await supabase
+        .from('users')
+        .insert({email, password, username})
+
+        if (insertErr) {
+            console.error('Insert error:', insertError.message);
+            alert(`User creation failed: ${insertError.message}`);
+            return;
+        }
+
+    } catch(err){console.error(err)}
+}
+
+   async _userAuth(){
+    //     let {data, error} = await supabase.auth.signUp({
+
+    //         email: username.value,
+    //         password: password.value
+
+    // })
+    //     if(error) console.error(error);
+    //     console.log(data);
+
+    //     //create user database //INSERT 
+    // const {err} = await supabase
+    // .from('users')
+    // .insert({email: username.value, password: password.value})
 
  }
     _getPosition(){

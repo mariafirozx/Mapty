@@ -31,21 +31,29 @@
   </head> 
   <body>
 
-  <section class="first "> 
-
+  <section class="first " href="#login"> 
     <div class="logRegPage">
+
       <div class="nav">
         <img src="logo.png" alt="Logo" class="logo" />
+        <div class="nav__links">
+          <a href="#about" class="about">About</a>
+        </div>
       </div>
+      <div class="spinner hidden">
+          <svg>
+            <use href="icons.svg#icon-loader"></use>
+          </svg>
+        </div>
       <div class="wrapper">
-        <div class="_form-box login">
+        <div class="_form-box login" >
           <h1>Login, & pin!</h1>
 
-          <form action="#login" class="_form">
+          <form action="#login" class="formContainer" id="form-log">
             <!-- <h1>Login, & start to pin!</h1> -->
             <div class="input-box">
               <input placeholder="email" id="email" required >
-              <i class='bx bx-user'></i>
+              <i class='bx bx-envelope'></i>
             </div>
             <div class="input-box">
               <input placeholder="password" id="pass" required>
@@ -56,7 +64,7 @@
               <label><input type="checkbox">Remember me</label>
               <a href="#"> Forgot password?</a>
             </div>
-            <button type="submit" class="btn">Log in</button>
+            <button type="submit" class="btn" id="login-btn">Log in</button>
             <div class="register-link">
               <p>Don't have an account? <a href="#"> Sign up</a></p>
             </div>
@@ -66,18 +74,18 @@
 
       
       <div class="_form-box register">
-        <form action="#register" class="_form">
+        <form action="#register" class="formContainer" id="form-reg">
           <h1>Register, & log!</h1>
           <div class="input-box">
             <input placeholder="username" id="username" required >
             <i class='bx bx-user'></i>
           </div>
           <div class="input-box">
-            <input placeholder="email" id="email" required >
-            <i class='bx bx-user'></i>
+            <input placeholder="email" id="email_reg" required >
+            <i class='bx bx-envelope'></i>
           </div>
           <div class="input-box">
-            <input placeholder="password" id="pass" required>
+            <input placeholder="password" id="pass_reg" required>
             <i class='bx bx-lock'></i>          
           </div>
     
@@ -85,7 +93,7 @@
             <label><input type="checkbox">I agree to the terms & conditions</label>
 
           </div>
-          <button type="submit" class="btn">register</button>
+          <button type="submit" class="btn" id="register-btn">Register</button>
           <div class="register-link">
             <p>Already have an account? <a href="#" class="login-link">  log in</a></p>
           </div>
@@ -112,6 +120,7 @@
   
   </section>
     
+  
 
 
   <section class="second">
@@ -124,11 +133,11 @@
         </div>
         <p class="msg"><i class="fa-regular fa-face-smile"></i> Start logging your workouts by pinning on the map!</p>
 
-        <div class="spinner hidden">
+        <!-- <div class="spinner hidden">
           <svg>
             <use href="icons.svg#icon-loader"></use>
           </svg>
-        </div>
+        </div> -->
         <ul class="workouts">
           <form class="form hidden">
             <div class="form__row">
