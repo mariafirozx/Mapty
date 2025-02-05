@@ -28,6 +28,7 @@ const msg = document.querySelector('.msg');
 const map = document.querySelector('#map');
 const spinner = document.querySelector('.spinner');
 
+const card = document.querySelector('.card');
 //login&registerForm --> main page
 const logRegPage = document.querySelector('.logRegPage');
 const main = document.querySelector('.main-page');
@@ -242,9 +243,6 @@ class App{
                         
                         // this.toggleWindow('RenderSpinner'); //show spinner
 
-                        setTimeout(() => {
-                            this.toggleWindow('RenderSpinner');
-                        }, 2.5 * 1000);
                         wrapper.classList.remove('active');
 
                         // logRegPage.classList.toggle('hide');
@@ -311,9 +309,12 @@ class App{
             console.error('Signup error:', error.message);
             alert(`Signup failed: ${error.message}`);
         }else{
-
-            //success msg container
-            alert('User created successfully');
+            //success msg container ,remove after 2s
+            card.classList.remove('hide');
+            setTimeout(() => {
+                card.classList.add('hide');
+            }, 3000);
+            
         }
 
             //create user database //INSERT 
@@ -322,8 +323,8 @@ class App{
         .insert({email, password, username})
 
         if (insertErr) {
-            console.error('Insert error:', insertError.message);
-            alert(`User creation failed: ${insertError.message}`);
+            console.error('Insert error:', insertErr.message);
+            alert(`User creation failed: ${insertErr.message}`);
             return;
         }
 
@@ -351,7 +352,6 @@ class App{
         //using bind since this keyword is undefined in a reg function, and loadMap here is reg function
         if(navigator.geolocation){
             navigator.geolocation.getCurrentPosition(this._loadMap.bind(this),function(){
-                alert('location invalid')
         
             }, 
        )};
