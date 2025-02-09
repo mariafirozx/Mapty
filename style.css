@@ -122,7 +122,7 @@ html {
 
 .nav a{
   position: relative;
-  font-size: 24px;
+  font-size: 22px;
   color: var(--color-dark--1) !important;
   text-decoration: none;
   font-weight: 700;
@@ -185,7 +185,7 @@ html {
   color: #fff;
   border-radius: 10px;
   z-index: 1;
-  margin-left: 26em;
+  margin-left: 29em;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -214,7 +214,7 @@ h1{
   /* color: #fff; */
   font-weight: 500;
 
-  font-size: 36px;
+  font-size: 38px;
   text-align: center;
 }
 
@@ -248,6 +248,7 @@ h1{
 .input-box input::placeholder{
   color: #e3dede;
   opacity: .6;
+  font-size: 14px;
 }
 .input-box i{
   position: absolute;
@@ -350,15 +351,15 @@ h1{
 }
 
 .card {
-  width: 300px;
-  height: 60px;
+  width: 380px;
+  height: 79px;
   border-radius: 14px;
   box-sizing: border-box;
-  padding: 6px 10px;
+  padding: 19px 25px;
   background-color: #f9c16cdc;
   
   top: 10px;
-  left: 40%;
+  left: 37%;
   transform: translateX(-50%);
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   position: absolute;
@@ -374,25 +375,25 @@ h1{
 .wave {
   position: absolute;
   transform: rotate(90deg);
-  left: -31px;
+  left: -36px;
   top: 32px;
-  width: 80px;
-  fill: var(--color-brand--2);
+  width: 90px;
+  fill: #2cd429;
 }
 .icon-container {
-  width: 35px;
-  height: 35px;
+  width: 75px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--color-brand--2);
+  background-color: #2cd429;
   border-radius: 50%;
   margin-left: 8px;
 }
 .icon {
-  width: 17px;
-  height: 17px;
-  color: var(--color-dark--1);
+  width: 23px;
+  height: 23px;
+  color: var(--color-dark--2);
 }
 .message-text-container {
   display: flex;
@@ -408,17 +409,34 @@ h1{
   font-family: josefin sans;
 }
 .message-text {
+  margin-bottom: 1px;
   color: #269b24;
   font-size: 18px;
   font-weight: 700;
 }
 .sub-text {
-  font-size: 15px;
-  color: #555;
+  font-size: 14px;
+  color: var(--color-dark--1);
+  margin-top: 5px;
+  font-weight: 360;
 }
+.sub-text span{
+  text-decoration: underline;
+  color: var(--color-dark--2);
+  font-weight: 600;
+}
+/* .verify-text{
+  font-size: 12px;
+  color: #555;
+  margin-top: 5px;
+
+  /* top: 10px;
+  bottom: 20px; 
+
+} */
 .cross-icon {
-  width: 18px;
-  height: 18px;
+  width: 30px;
+  height: 30px;
   color: #555;
   cursor: pointer;
 }
@@ -897,4 +915,35 @@ a:visited {
 
 .hide{
   display: none;
+}
+
+/* footer */
+.container{
+   /* position: absolute;
+   z-index: 2000;
+   display: block;
+   position: fixed; */
+  left: 0;
+  bottom: 8px;
+  width: 100%;
+  background-color: transparent;
+  color: white;
+  text-align: center;
+  z-index: 2000;
+  display: block;
+  position: absolute;
+  
+}
+
+.container p{
+  font-family: josefin sans;
+  font-size: 11px;
+  color: var(--color-dark--1);
+  letter-spacing: 2px;
+  
+}
+
+.container a{
+  color: var(--color-dark--1);
+  text-decoration: underline;
 }
