@@ -487,8 +487,10 @@ class App{
         `
 
         card.innerHTML ='';
+
         card.insertAdjacentHTML('afterbegin', el);
         card.classList.remove('hide');
+
         
         
         // card.innerHTML = el;

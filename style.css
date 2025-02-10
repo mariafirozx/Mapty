@@ -257,7 +257,11 @@ h1{
   transform: translateY(-50%);
   font-size: 20px;
 }
+.input-box :focus{
+  border: 2px solid var(--color-brand--2);
+  box-shadow: 0 0 3px var(--color-brand--2);
 
+}
 .wrapper .remember-forgot{
   display: flex;
   justify-content: space-between;
