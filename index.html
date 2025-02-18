@@ -124,7 +124,30 @@
       </svg>
 
       <!-- success card && verification msg -->
-    <div class="card hide">
+
+      <!-- <div id="messageCard" class="card ">
+        <svg class="wave" viewBox="0 0 1440 320">
+          <path id="path"></path>
+        </svg>
+      
+        <div class="icon-container">
+          <svg id="messageIcon" viewBox="0 0 512 512" class="icon">
+            <path id="path2"></path>
+          </svg>
+        </div>
+      
+        <div class="message-text-container">
+          <p id="messageText" class="message-text">You're all set!</p>
+          <p id="subText" class="sub-text">Verification link has been sent to your email.</p>
+        </div>
+      
+        <svg id="closeMessage" class="cross-icon" viewBox="0 0 15 15">
+          <path></path>
+        </svg>
+      </div> -->
+
+
+    <div id="success" class="card hide">
       <svg class="wave" viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
         <path id="path"
           d="M0,256L11.4,240C22.9,224,46,192,69,192C91.4,192,114,224,137,234.7C160,245,183,235,206,213.3C228.6,192,251,160,274,149.3C297.1,139,320,149,343,181.3C365.7,213,389,267,411,282.7C434.3,299,457,277,480,250.7C502.9,224,526,192,549,181.3C571.4,171,594,181,617,208C640,235,663,277,686,256C708.6,235,731,149,754,122.7C777.1,96,800,128,823,165.3C845.7,203,869,245,891,224C914.3,203,937,117,960,112C982.9,107,1006,181,1029,197.3C1051.4,213,1074,171,1097,144C1120,117,1143,107,1166,133.3C1188.6,160,1211,224,1234,218.7C1257.1,213,1280,139,1303,133.3C1325.7,128,1349,192,1371,192C1394.3,192,1417,128,1429,96L1440,64L1440,320L1428.6,320C1417.1,320,1394,320,1371,320C1348.6,320,1326,320,1303,320C1280,320,1257,320,1234,320C1211.4,320,1189,320,1166,320C1142.9,320,1120,320,1097,320C1074.3,320,1051,320,1029,320C1005.7,320,983,320,960,320C937.1,320,914,320,891,320C868.6,320,846,320,823,320C800,320,777,320,754,320C731.4,320,709,320,686,320C662.9,320,640,320,617,320C594.3,320,571,320,549,320C525.7,320,503,320,480,320C457.1,320,434,320,411,320C388.6,320,366,320,343,320C320,320,297,320,274,320C251.4,320,229,320,206,320C182.9,320,160,320,137,320C114.3,320,91,320,69,320C45.7,320,23,320,11,320L0,320Z"
@@ -148,8 +171,7 @@
       </div>
       <div class="message-text-container">
         <p class="message-text">You're all set!</p>
-        <!-- <p class="sub-text">Register successful.  -->
-          <p class="sub-text"> <span>Verification link </span>has been sent to your registered email, verify to continue.</p>
+         <p class="sub-text"> <span>Verification link </span>has been sent to your registered email, verify to continue.</p>
       </div>
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -166,7 +188,16 @@
           fill-rule="evenodd"
         ></path>
       </svg>
-    </div>
+    </div>  
+
+
+    <div id="err" class="error hide">
+      <div class="error__icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" height="24" fill="none"><path fill="#393a37" d="m13 13h-2v-6h2zm0 4h-2v-2h2zm-1-15c-1.3132 0-2.61358.25866-3.82683.7612-1.21326.50255-2.31565 1.23915-3.24424 2.16773-1.87536 1.87537-2.92893 4.41891-2.92893 7.07107 0 2.6522 1.05357 5.1957 2.92893 7.0711.92859.9286 2.03098 1.6651 3.24424 2.1677 1.21325.5025 2.51363.7612 3.82683.7612 2.6522 0 5.1957-1.0536 7.0711-2.9289 1.8753-1.8754 2.9289-4.4189 2.9289-7.0711 0-1.3132-.2587-2.61358-.7612-3.82683-.5026-1.21326-1.2391-2.31565-2.1677-3.24424-.9286-.92858-2.031-1.66518-3.2443-2.16773-1.2132-.50254-2.5136-.7612-3.8268-.7612z"></path></svg>
+      </div>
+      <div class="error__title">Email already exist, register using different email!</div>
+      <div class="error__close"><svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 20 20" height="20"><path fill="#393a37" d="m15.8333 5.34166-1.175-1.175-4.6583 4.65834-4.65833-4.65834-1.175 1.175 4.65833 4.65834-4.65833 4.6583 1.175 1.175 4.65833-4.6583 4.6583 4.6583 1.175-1.175-4.6583-4.6583z"></path></svg></div>
+  </div>
 
 
     </div>

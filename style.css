@@ -441,13 +441,87 @@ h1{
   cursor: pointer;
 }
 
+/* .success {
+  border-left: 5px solid #28a745;
+}
+
+.error {
+  border-left: 5px solid #dc3545;
+}
+
+.warning {
+  border-left: 5px solid #ffc107;
+}
+
+.info {
+  border-left: 5px solid #17a2b8;
+} */
+
+
 
 .card.hide{
-  transform: translate(-50%, -100%);
+  transform: translateX(-50%) translateY(20px);
+  visibility: hidden;
   opacity: 0;
 }
 
 
+/*/ error card*/
+
+.error {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  width: 320px;
+  padding: 12px;
+  top: 10px;
+  left: 37%;
+  transform: translateX(-50%);
+  position: absolute;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  background: #EF665B;
+  border-radius: 8px;
+  box-shadow: 0px 0px 5px -3px #111;
+  z-index: 1000;
+  animation: slideFromTop 1s ease forwards;
+}
+
+.error__icon {
+  width: 20px;
+  height: 20px;
+  transform: translateY(-2px);
+  margin-right: 8px;
+}
+
+.error__icon path {
+  fill: #fff;
+}
+
+.error__title {
+  font-weight: 500;
+  font-size: 14px;
+  color: #fff;
+  font-family: josefin sans;
+}
+
+.error__close {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.error__close path {
+  fill: #fff;
+}
+
+.error.hide{
+  transform: translateX(-50%) translateY(20px);
+  visibility: hidden;
+  opacity: 0;
+}
 /* .wrapper ._form-box{
   backface-visibility: hidden;
 } */
