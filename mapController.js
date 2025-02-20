@@ -374,6 +374,11 @@ class App{
 
             logRegPage.classList.toggle('hide');
             main.classList.toggle('hide');
+
+            const user_id = '046570e8-68a4-4e6b-8d9e-d0eba537b8eb';
+            this._fetchWorkout(user_id);
+
+            
             //fetch username
             const {data: user} = await supabase
                 .from('users')
@@ -383,6 +388,7 @@ class App{
         
             if(user){
                 alert(`Welcome ${user.username}`);
+                
             }
         }
 
@@ -623,8 +629,9 @@ class App{
         this._setSupbaseWorkouts(workout);
         // console.log(workout.type, workout.distance, workout.duration, workout.date,userId);
 
-        const user_id = await this._getUser();
-        await this._fetchWorkout(user_id)
+        // const user_id = await this._getUser();
+        // console.log(user_id);
+        //  this._fetchWorkout(user_id)
     }
 
     async _fetchWorkout(userId){
@@ -640,7 +647,11 @@ class App{
 
             if(error) alert('cannot fetch workouts'); 
 
-            console.log(workout);
+            if(workout){
+                console.log(workout);
+            }else{
+                console.log('no workouts');
+            }
 
             return workout;
 
