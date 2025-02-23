@@ -375,8 +375,8 @@ class App{
             logRegPage.classList.toggle('hide');
             main.classList.toggle('hide');
 
-            const user_id = '046570e8-68a4-4e6b-8d9e-d0eba537b8eb';
-            this._fetchWorkout(user_id);
+            const user_id = await this._getUser();
+            await this._fetchWorkout(user_id);
 
             
             //fetch username
@@ -385,6 +385,15 @@ class App{
                 .select('username')
                 .eq('email', userAuth.user.email)
                 .single();
+
+            // const {data: users} = await supabase
+            //     .from('users')
+            //     .select('*')
+            //     .eq('email', userAuth.user.email)
+            
+            // if(users){
+            //     console.log(users);
+            // }
         
             if(user){
                 alert(`Welcome ${user.username}`);
@@ -634,7 +643,7 @@ class App{
         //  this._fetchWorkout(user_id)
     }
 
-    async _fetchWorkout(userId){
+    async _fetchWorkout(user_id){
 
         try{
 
@@ -643,11 +652,11 @@ class App{
             const {workout, error} = await supabase
                 .from('workout')
                 .select('*')
-                .eq('user_id', userId);
+                .eq('user_id', user_id);
 
             if(error) alert('cannot fetch workouts'); 
 
-            if(workout){
+            if(workout && workout.length > 0){
                 console.log(workout);
             }else{
                 console.log('no workouts');
