@@ -181,7 +181,7 @@ class App{
 
         //get local user data
 
-       this._getLocalStorage();
+    //    this._getLocalStorage();
 
         //attach event handlers
 
@@ -375,8 +375,9 @@ class App{
             logRegPage.classList.toggle('hide');
             main.classList.toggle('hide');
 
-            const user_id = await this._getUser();
-            await this._fetchWorkout(user_id);
+            // const user_id = await this._getUser();
+           await this._renderWorkoutUI();
+            // await this._fetchWorkout(user_id);
 
             
             //fetch username
@@ -541,7 +542,7 @@ class App{
     //generate new workout form -- render in map and render in list
 
     
-    async _newWorkout(e){
+    async _newWorkout(e, workout){
         e.preventDefault();
     
         const validInput = (...inputs) => inputs.every(inp => Number.isFinite(inp) );
@@ -553,9 +554,7 @@ class App{
         const date = inputDate.value;
         console.log(date);
 
-        
-        let workout;
-
+    
         //if editing a existing workout 
         if(this.#editWorkout){
 
@@ -622,7 +621,8 @@ class App{
 
         this._renderWorkoutMarker(workout);
         
-        this._renderWorkout(workout);
+        // this._renderWorkout(workout);
+       await this._renderWorkoutUI();
 
         this._hideform();
 
@@ -631,7 +631,7 @@ class App{
 
         
         //set local storage to all workouts
-        this._setLocalStorage();
+        // this._setLocalStorage();
         //insert details in supabase
         // const userId = await this._getUser();
         // console.log(userId);
@@ -648,6 +648,7 @@ class App{
         try{
 
             // const userId = await this._getUser();
+            //supabase takes in data as in res, to allocate given name; use it as obj hence -> data: workout
 
             const {data: workout, error} = await supabase
                 .from('workout')
@@ -658,6 +659,7 @@ class App{
 
             if(workout && workout.length > 0){
                 console.log(workout);
+
             }else{
                 console.log('no workouts');
             }
@@ -667,6 +669,22 @@ class App{
         }catch(err){
             console.error(err);
         }
+    }
+
+    async _renderWorkoutUI(){
+
+        //get userid 
+        const user_id = await this._getUser();
+        const workouts = await this._fetchWorkout(user_id);
+
+        if(workouts && workouts.length > 0){
+            workouts.forEach(workout =>{
+                this._renderWorkout(workout);
+            } );
+        }else{
+            console.log('no workouts found for this user');
+        }
+
     }
 
     _renderWorkoutMarker(workout){
