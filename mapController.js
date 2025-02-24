@@ -649,7 +649,7 @@ class App{
 
             // const userId = await this._getUser();
 
-            const {workout, error} = await supabase
+            const {data: workout, error} = await supabase
                 .from('workout')
                 .select('*')
                 .eq('user_id', user_id);
