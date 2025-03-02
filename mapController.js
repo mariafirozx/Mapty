@@ -33,8 +33,9 @@ const card = document.querySelector('.card');
 const logRegPage = document.querySelector('.logRegPage');
 const main = document.querySelector('.main-page');
 const errCard = document.querySelector('.error');
+const about_us_page = document.querySelector('.container');
 
-
+const regLogWrapper = document.querySelector('.wrapper');
 //login form
 const username = document.getElementById('email');
 const password = document.getElementById('pass');
@@ -57,6 +58,8 @@ const regBtn = document.getElementById('register-btn');
 
 const loginForm = document.getElementById('form-log');
 const regForm = document.getElementById('form-reg');
+// const about_us = document.querySelector('a[href=#about]');
+
 // using geolocation API --browser
 
 // display map using leaflet lib
@@ -152,6 +155,7 @@ class App{
 
         this._registerRender();
         this._loginRender();
+        this._render_aboutUs();
 
 
         // if(regForm){
@@ -227,6 +231,14 @@ class App{
         //  this._setMapViewtoPop();
     }
 
+    _render_aboutUs(){
+
+        document.querySelector('a[href="#about"]').addEventListener('click',function(){
+            about_us_page.classList.remove('hidden');
+            wrapper.classList.add('hide');
+        })
+
+    }
     _registerRender(){
 
         try{

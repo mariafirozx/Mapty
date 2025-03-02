@@ -538,6 +538,16 @@ h1{
 .wrapper ._form-box.register{
   transform: rotateY(180deg); 
 }  */
+
+
+/*about us page*/
+.container.hidden{
+  display: none;
+}
+
+
+
+
 /* -------------SECOND PAGE - MAP [main]---------------*/
 .main-page{
   font-family: 'Manrope', sans-serif;
@@ -996,7 +1006,7 @@ a:visited {
 }
 
 /* footer */
-.container{
+.contain{
    /* position: absolute;
    z-index: 2000;
    display: block;
@@ -1013,7 +1023,7 @@ a:visited {
   
 }
 
-.container p{
+.text{
   font-family: josefin sans;
   font-size: 11px;
   color: var(--color-dark--1);
@@ -1021,7 +1031,7 @@ a:visited {
   
 }
 
-.container a{
+.contain a{
   color: var(--color-dark--1);
   text-decoration: underline;
 }
