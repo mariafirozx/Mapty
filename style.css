@@ -22,6 +22,7 @@ html {
   font-size: 62.5%;
   box-sizing: border-box;
   overflow: hidden;
+  scroll-behavior: smooth;
 }
 
 @keyframes color {
@@ -541,9 +542,112 @@ h1{
 
 
 /*about us page*/
-.container.hidden{
+.aboutUs{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+ 
+  display: flex;
+  justify-content: center;
+}
+
+.contents{
+  font-family: josefine, sans-serif;
+  display: block;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+
+  
+  /* background-color: black; */
+  /* padding: 4.5rem 5rem; */
+  right: 5em;
+  left: 1em;
+  margin-top: 10em;
+  z-index: 1000; 
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-bottom: 25px;
+
+
+  /* font-family: josefine, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;   /* Full viewport width */
+  /* height: 100vh;  /* Full viewport height */
+  /* overflow-x: hidden; /* Allow horizontal scrolling */
+  /* overflow-y: auto; /* Prevent vertical scrolling */
+  /* padding: 4.5rem 5rem;
+  margin-right: 29em;
+  margin-top: 5em;
+  z-index: 1000; */ 
+  
+
+}
+.about-img{
+  width: 50%;
+  height: 50%;
+  border-radius: 50%;
+  margin-left: 1em;
+  margin-top: 1em;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+}
+.abt-img{
+  max-width: 970px;
+}
+
+.descriptionsAbout{
+  font-size: 1.5em;
+  font-weight: 600;
+  color: var(--color-dark--1);
+  margin-top: 1em;
+  margin-left: 1em;
+  margin-right: 1em;
+  text-align: center;
+  font-family: josefine, sans-serif;
+  width: 100%;
+  display: grid;
+  place-items: center;
+
+}
+hr {
+  border: none; /* Remove any existing border */
+  border-top: 1px solid var(--color-dark--2); /* Add a top border to create the line */
+  margin: 1em 0; /* Add some margin for spacing */
+  width: 50%; /* Ensure the line takes the full width */
+}
+.AboutText{ 
+
+  justify-content: center;
+  position: absolute;
+  text-align: center;
+
+}
+.AboutText-desc{
+  font-size: 15px;
+  width: 55%;
+  text-align: center;
+
+}
+.AboutText-subText{
+  font-size: 12px;
+  width: 50%;
+  text-align: center;
+}
+
+.aboutUs.hidden{
   display: none;
 }
+
+
 
 
 

@@ -33,7 +33,7 @@ const card = document.querySelector('.card');
 const logRegPage = document.querySelector('.logRegPage');
 const main = document.querySelector('.main-page');
 const errCard = document.querySelector('.error');
-const about_us_page = document.querySelector('.container');
+const about_us_page = document.querySelector('.aboutUs');
 
 const regLogWrapper = document.querySelector('.wrapper');
 //login form
@@ -627,7 +627,7 @@ class App{
 
             }
         //add new obj to workput array
-            this.#workouts.push(workout);
+            // this.#workouts.push(workout);
     }
         //render workout on map as marker
 
