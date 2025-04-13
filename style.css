@@ -18,11 +18,12 @@
   box-sizing: inherit;
 }
 
-html {
+html{
   font-size: 62.5%;
   box-sizing: border-box;
   overflow: hidden;
   scroll-behavior: smooth;
+  height: 100%;
 }
 
 @keyframes color {
@@ -113,14 +114,43 @@ html {
   top: 0;
   left: 0;
   width: 100%;
-  padding: 10px 100px;
-  background-color: transparent;
+  height: 11%;
+  padding: 0px 70px;
+ 
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: linear-gradient(-45deg, rgb(39, 106, 161), rgb(59, 221, 145), var(--color-brand--1), var(--color-dark--2));
+
+  /* background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab); */
+  animation: gradient 15s ease infinite;
+  background-size: 300% 300%;
+  backdrop-filter: blur(10px);
+  outline: none !important;
+  box-shadow: none !important;
+
+  z-index: 2000;
+}
+.header::before,
+.header::after {
+  position: absolute;
+  left: 0;
+  top: 0;
+  content: '';
+  width: 100%;
+  height: 100%;
   z-index: 100;
+
+  opacity: 40%;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
+.header::before {
+  background:  rgb(39, 106, 161);
+  filter: url(#noiseFilter);
+  z-index: 100;
+}
 .nav a{
   position: relative;
   font-size: 22px;
@@ -131,6 +161,7 @@ html {
 
   margin-top: 1em;
   left: 2px !important;
+  z-index: 1000;
 }
 
 .nav a::before{
@@ -148,12 +179,13 @@ html {
   width: 100%;
 }
 .logo {
-  margin-top: 1em;
+  margin-top: 3em;
   width: auto;
   max-height: none;
   height: auto;
   display: block;
   margin-left: 1em;
+  z-index: 1000;
 }
 .logo img{ 
 
@@ -548,11 +580,11 @@ h1{
   left: 0;
   width: 100%;
   height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
+  
  
   display: flex;
   justify-content: center;
+  z-index: 99;
 }
 
 .contents{
@@ -560,41 +592,35 @@ h1{
   display: block;
   justify-content: center;
   align-items: center;
-  position: absolute;
-
-  
-  /* background-color: black; */
-  /* padding: 4.5rem 5rem; */
-  right: 5em;
-  left: 1em;
-  margin-top: 10em;
-  z-index: 1000; 
+  position: relative;
   overflow-x: hidden;
   overflow-y: auto;
+  scrollbar-width: thin;
+
+  margin-right: 7em;
+  left: 1em;
+  margin-top: 13em;
+  z-index: 1000; 
+ 
   padding-bottom: 25px;
 
+}
 
-  /* font-family: josefine, sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;   /* Full viewport width */
-  /* height: 100vh;  /* Full viewport height */
-  /* overflow-x: hidden; /* Allow horizontal scrolling */
-  /* overflow-y: auto; /* Prevent vertical scrolling */
-  /* padding: 4.5rem 5rem;
-  margin-right: 29em;
-  margin-top: 5em;
-  z-index: 1000; */ 
-  
-
+::-webkit-scrollbar{
+  width: 8px !important;
+  height: 2px;
+  background-color: yellow;
+}
+::-webkit-scrollbar-track{
+  background: var(--color-dark--2);
+  border-radius: 10px;
 }
 .about-img{
   width: 50%;
   height: 50%;
   border-radius: 50%;
   margin-left: 1em;
-  margin-top: 1em;
+  margin-top: 0px;
   display: grid;
   place-items: center;
   width: 100%;
@@ -603,12 +629,17 @@ h1{
 .abt-img{
   max-width: 970px;
 }
+.t1{
+  font-size: 50px;
+  text-align: center;
+  margin-left: 23px;
+}
 
 .descriptionsAbout{
   font-size: 1.5em;
   font-weight: 600;
   color: var(--color-dark--1);
-  margin-top: 1em;
+  margin-bottom: 3em;
   margin-left: 1em;
   margin-right: 1em;
   text-align: center;
@@ -629,18 +660,21 @@ hr {
   justify-content: center;
   position: absolute;
   text-align: center;
+  
 
 }
 .AboutText-desc{
-  font-size: 15px;
-  width: 55%;
+  font-size: 19px;
+  width: 43%;
   text-align: center;
+  line-height: 1.5em;
 
 }
 .AboutText-subText{
   font-size: 12px;
   width: 50%;
   text-align: center;
+
 }
 
 .aboutUs.hidden{
@@ -701,10 +735,10 @@ a:visited {
   margin: 10px;
 }
 .deleteAll{
-  padding: 7px 14px;
+  padding: 7px 16px;
   border: 2px solid #2c2c2c;
   background-color: #00c46a;
-  color: #ffffff;
+  color: #ffffff !important;
   font-size: 1.2rem;
   cursor: pointer;
   border-radius: 30px;
@@ -716,7 +750,6 @@ a:visited {
 }
 
 .deleteAll::after {
-  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -736,8 +769,8 @@ a:visited {
 
 .deleteAll:hover {
   border-color: #666666;
-  background: #242222;
-  color: #ececec;
+  background: var(--color-brand--1);
+  color: #ececec !important;
 }
 
 .msg{
@@ -1116,22 +1149,49 @@ a:visited {
    display: block;
    position: fixed; */
   left: 0;
-  bottom: 8px;
+  bottom: 0px;
   width: 100%;
-  background-color: transparent;
+  height: 24px;
+  background: linear-gradient(-45deg, rgb(39, 106, 161), rgb(59, 221, 145), var(--color-brand--1), var(--color-dark--2));
+
+  /* background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab); */
+  animation: gradient 15s ease infinite;
+  background-size: 300% 300%;
+  backdrop-filter: blur(10px);
   color: white;
   text-align: center;
-  z-index: 2000;
+  z-index: 200;
   display: block;
   position: absolute;
   
 }
+.contain::before,
+.contain::after {
+  position: absolute;
+  left: 0;
+  top: 0;
+  content: '';
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+
+  opacity: 40%;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.contain::before {
+  background:  rgb(39, 106, 161);
+  filter: url(#noiseFilter);
+  z-index: 100;
+}
 
 .text{
   font-family: josefin sans;
-  font-size: 11px;
+  font-size: 9px;
   color: var(--color-dark--1);
   letter-spacing: 2px;
+  margin-top: 10px;
   
 }
 

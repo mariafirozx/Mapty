@@ -5,6 +5,8 @@
 
 
 import {wrapper} from './logRegisterView.js';
+import* as navigate from './scrollView.js';
+
 
 
 'use strict';
@@ -233,10 +235,15 @@ class App{
 
     _render_aboutUs(){
 
-        document.querySelector('a[href="#about"]').addEventListener('click',function(){
-            about_us_page.classList.remove('hidden');
-            wrapper.classList.add('hide');
+        document.addEventListener('DOMContentLoaded' ,function(){
+            window.addEventListener('hashchange', navigate.navigateToSection);
+
+            navigate.navigateToSection();
         })
+
+        // document.querySelector('a[href="#about"]').addEventListener('click',function(){
+        //     navigate();
+        // })
 
     }
     _registerRender(){
