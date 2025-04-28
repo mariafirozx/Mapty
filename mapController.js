@@ -99,6 +99,10 @@ class Workout{
         const months = 
         ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
+        if(!(this.date instanceof Date)){
+            this.date = new Date(this.date);
+        }
+
         this.description = `${this.type[0].toUpperCase()}${this.type.slice(1)} on ${months[this.date.getMonth()]} ${this.date.getDate()}`;
     }
     click(){
@@ -143,7 +147,7 @@ class Cycling extends Workout{
 ///////////////////////////////////////////////
 // create class App ---refactoring
 
-class App{
+ class App{
 
     map = document.querySelector('#map');
 
@@ -200,7 +204,7 @@ class App{
         document.querySelector('.workouts').addEventListener('click', (e)=>{
             if(e.target.classList.contains('deleteWorkoutBtn')){ 
                 //event delegation for when searching for an el thats being created dynamically --> learned in course tooo!!!!! REMEMBER !!!
-                this._showCard('deleteWorkout', e); 
+                 this._showCard('deleteWorkout', e); 
             }else if(e.target.classList.contains('editBtn')){ 
                 //event delegation for when searching for an el thats being created dynamically --> learned in course tooo!!!!! REMEMBER !!!
                 this._editWorkout(e); 
@@ -570,7 +574,7 @@ class App{
         const type = inputType.value;
         const distance = +inputDistance.value;
         const duration = +inputDuration.value;
-        const date = inputDate.value;
+        const date = inputDate.value ? new Date(inputDate.value) : new Date();
         console.log(date);
 
     
@@ -622,23 +626,30 @@ class App{
             if(type === 'running'){
                 const cadence = +inputCadence.value;
                 // if(!Number.isFinite(distance) || !Number.isFinite(duration) || !Number.isFinite(cadence)) return alert('Input has to be +ve numbers');
-                if(!validInput(distance, duration, cadence) || !posNumbers(distance, duration, cadence)) return alert('Input has to be valid numbers');
+                if(!validInput(distance, duration, cadence) || !posNumbers(distance, duration, cadence)) {
+                    return alert('Input has to be valid numbers');}
                 workout = new Running([lat, lng], distance, duration, cadence);
-            }
+    }
 
             if(type === 'cycling') {
                         //.. if activity cycle, create cycle obj
                 const elevation = +inputElevation.value;
-                if(!validInput(distance, duration, elevation) || !posNumbers(distance, duration) ) return alert('Input has to be valid numbers');
+                if(!validInput(distance, duration, elevation) || !posNumbers(distance, duration) ) {
+                return alert('Input has to be valid numbers');}
+
                 workout = new Cycling([lat, lng], distance, duration, elevation);
 
             }
+            // workout.date = date;
+            // console.log(workout.date);
+            this.#workouts.push(workout);
         //add new obj to workput array
             // this.#workouts.push(workout);
     }
         //render workout on map as marker
 
         this._renderWorkoutMarker(workout);
+        console.log(workout.id);
         
         // this._renderWorkout(workout);
        await this._renderWorkoutUI();
@@ -655,6 +666,7 @@ class App{
         // const userId = await this._getUser();
         // console.log(userId);
         this._setSupbaseWorkouts(workout);
+        console.log(workout);
         // console.log(workout.type, workout.distance, workout.duration, workout.date,userId);
 
         // const user_id = await this._getUser();
@@ -669,24 +681,51 @@ class App{
             // const userId = await this._getUser();
             //supabase takes in data as in res, to allocate given name; use it as obj hence -> data: workout
 
-            const {data: workout, error} = await supabase
+            const {data: workouts, error} = await supabase
                 .from('workout')
                 .select('*')
                 .eq('user_id', user_id);
 
             if(error) alert('cannot fetch workouts'); 
 
-            if(workout && workout.length > 0){
-                console.log(workout);
+            if(workouts && workouts.length > 0){
+                console.log(workouts);
+
+                return workouts.map(workout => {
+                    const parsedWorkout = 
+                        workout.workoutType === 'running'
+                           ? new Running(
+                                JSON.parse(workout.coords),
+                                workout.workoutDistance,
+                                workout.workoutDuration,
+                                workout.workoutCadence
+                                
+                           )
+                            : new Cycling(
+                                JSON.parse(workout.coords),
+                                workout.workoutDistance,
+                                workout.workoutDuration,
+                                workout.workoutElevation
+                            
+                            );
+                    parsedWorkout.id = workout.workout_id;
+
+                    const utcDate = new Date(workout.workoutDate);
+                    parsedWorkout.date = new Date(utcDate.toLocaleString('en-US', {timeZone: 'Asia/Kuala_Lumpur'}));
+                    console.log(parsedWorkout.date);
+                    return parsedWorkout;
+                    
+                    
+                });
 
             }else{
-                console.log('no workouts');
+                console.log('no workouts found for this user');
             }
 
-            return workout;
+            
 
         }catch(err){
-            console.error(err);
+            console.error('error fetching workouts',err);
         }
     }
 
@@ -699,6 +738,7 @@ class App{
         if(workouts && workouts.length > 0){
             workouts.forEach(workout =>{
                 this._renderWorkout(workout);
+                this._renderWorkoutMarker(workout);
             } );
         }else{
             console.log('no workouts found for this user');
@@ -892,43 +932,89 @@ class App{
 
     }
 
-    _deleteWorkout(e){
+   async _deleteWorkout(e){
 
         try{
 
+            ///!!!!new code using supabase!!!!
+
+
+            //first find workout el in dom
             const workoutEl = e.target.closest('.workout');
+            if(!workoutEl){
+                console.error('workout el not found');
+                return;
+            }
 
-            if(!workoutEl) return;
+            //get workout id from dataset
+            const workout_ID = workoutEl.dataset.id;
+            console.log(`deleting workout with id ${workout_ID} `);
 
-            const workout = this.#workouts.find(work => work.id === workoutEl.dataset.id ); 
-            
-            if(!workout) return;
-            //remove workout from array
-            const i = this.#workouts.indexOf(workout);
-            this.#workouts.splice(i, 1);
-            console.log(i);
+            //find workout  in array
+            const workoutIndex = this.#workouts.findIndex(work => work.id === +workout_ID);
+            if(workoutIndex === -1){
+                console.error('workout not found in array')
+                return;
+            }
 
-            //remove from UI
+            // const workoutEl = e.target.closest('.workout').dataset.id;
+            // console.log(workoutEl);
+
+            const {error} = await supabase 
+                .from('workout')
+                .delete()
+                .eq('workout_id', workout_ID);
+
+            if(error){
+                alert('Workout not deleted');
+            }
+
+            this.#workouts.splice(workoutIndex, 1);
             workoutEl.remove();
-            //remove from local storage
+
+
+
+
+
+
+
+
+
+            ////old code using storage
+
+        //     const workoutEl = e.target.closest('.workout');
+
+        //     if(!workoutEl) return;
+
+        //     const workout = this.#workouts.find(work => work.id === workoutEl.dataset.id ); 
+            
+        //     if(!workout) return;
+        //     //remove workout from array
+        //     const i = this.#workouts.indexOf(workout);
+        //     this.#workouts.splice(i, 1);
+        //     console.log(i);
+
+        //     //remove from UI
+        //     workoutEl.remove();
+        //     //remove from local storage
            
-            console.log('test1');
-            this._setLocalStorage();
-            // localStorage.removeItem(workout.id);
+        //     console.log('test1');
+        //     this._setLocalStorage();
+        //     // localStorage.removeItem(workout.id);
 
-            /**update: dont directly call remove item on setstorage as it creates errors; and dont 
-             * directly remove item from local storage as it will remove all items from local storage n return upon refresh
-             * instead, remove from array, then set local storage; hence, the item will be removed from local storage
-             */
-            //remove from map
-            console.log('test');
+        //     /**update: dont directly call remove item on setstorage as it creates errors; and dont 
+        //      * directly remove item from local storage as it will remove all items from local storage n return upon refresh
+        //      * instead, remove from array, then set local storage; hence, the item will be removed from local storage
+        //      */
+        //     //remove from map
+        //     console.log('test');
 
             
-           const marker = this.#map._layers[workout.markerId];
-           if(marker) this.#map.removeLayer(marker);
-        //    this._findpopup(marker, workout).remove();
+        //    const marker = this.#map._layers[workout.markerId];
+        //    if(marker) this.#map.removeLayer(marker);
+        // //    this._findpopup(marker, workout).remove();
             
-        location.reload();
+        // location.reload();
             
         // //reset map
         // this.#map.removeLayer(workout);
@@ -982,18 +1068,21 @@ class App{
         try{
 
             const userId = await this._getUser();
+            const workoutDate = workout.date instanceof Date ? workout.date : new Date(workout.date)
 
+            const localDate = workoutDate.toLocaleString('en-CA', {timeZone: 'Asia/Kuala_Lumpur'}).split(',')[0];
             if(workout.type === 'running'){
                 const {data, err} = await supabase
                 .from('workout')
                 .insert([{
                     user_id: userId,
+                    workout_id: workout.id,
                     coords: JSON.stringify(workout.coords),
                     workoutType: workout.type, 
                     workoutDistance: workout.distance,
                     workoutDuration: workout.duration,
                     workoutCadence: workout.cadence,
-                    workoutDate: workout.date.toISOString(),
+                    workoutDate: localDate,
                     
                 }]);
 
@@ -1007,17 +1096,19 @@ class App{
                 .from('workout')
                 .insert([{
                     user_id: userId,
+                    workout_id: workout.id,
                     coords: JSON.stringify(workout.coords),
                     workoutType: workout.type, 
                     workoutDistance: workout.distance,
                     workoutDuration: workout.duration,
                     workoutElevation: workout.elevation,
-                    workoutDate: workout.date.toISOString(),
+                    workoutDate: localDate,
                 }]);
                 if(err){
                     alert('Workout not saved');
                 }else{
                     console.log(data);
+                    console.log(workout.id);
                 }
             }
         
@@ -1063,7 +1154,24 @@ class App{
        
     }
 
-    _showCard(action, e){
+    async _deleteAllWorkout(){
+        const user_id = await this._getUser();
+        console.log(user_id);
+
+        const {error} = await supabase
+            .from('workout')
+            .delete()
+            .eq('user_id', user_id);
+
+        if(error){
+            alert('cannot delete your workouts');
+        }
+
+        location.reload();
+
+    }
+
+   async _showCard(action, e){
 
         //if no workouts
     
@@ -1080,7 +1188,7 @@ class App{
     
         this._confirmHandler = ()=>{ //arrow function to bind this keyword; use arrow when error is not a function !!!!
             if(action === 'clearAll'){
-                 app.reset();
+                 this._deleteAllWorkout();
             }
             if(action === 'deleteWorkout'){
                this._deleteWorkout(e);
@@ -1147,6 +1255,7 @@ class App{
 // })
 
 const app = new App();
+
 
 
 

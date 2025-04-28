@@ -161,6 +161,8 @@ html{
 
   margin-top: 1em;
   left: 2px !important;
+  margin-right: 3rem !important;
+  
   z-index: 1000;
 }
 
@@ -575,20 +577,40 @@ h1{
 
 /*about us page*/
 .aboutUs{
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: relative;
+  /* top: 0;
+  left: 0; */
   width: 100%;
-  height: 100%;
-  
+  height: 100vh;
+  padding: 10rem 7rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;  
  
   display: flex;
   justify-content: center;
   z-index: 99;
 }
 
+.aboutUs::-webkit-scrollbar{
+  width: 5px;
+  height: 5%;
+
+  /* make scrollbar transparent */
+}
+.aboutUs::-webkit-scrollbar-thumb{
+  background: var(--color-dark--2);
+  border-radius: 10px;
+  /* make scrollbar transparent */
+}
+
 .contents{
-  font-family: josefine, sans-serif;
+
+  max-width: 900px;
+  height: 100%;
+  margin-right: 26rem;
+  
+  /* font-family: josefine, sans-serif;
   display: block;
   justify-content: center;
   align-items: center;
@@ -602,60 +624,102 @@ h1{
   margin-top: 13em;
   z-index: 1000; 
  
-  padding-bottom: 25px;
+  padding-bottom: 25px; */
 
 }
 
-::-webkit-scrollbar{
+/* .contents::-webkit-scrollbar{
   width: 8px !important;
   height: 2px;
   background-color: yellow;
 }
-::-webkit-scrollbar-track{
+.contents::-webkit-scrollbar-track{
   background: var(--color-dark--2);
   border-radius: 10px;
-}
+} */
 .about-img{
-  width: 50%;
-  height: 50%;
+  display: flex;
+  justify-content: center;
+  /* width: 100%;
+  
+  padding-bottom: 9em;
   border-radius: 50%;
   margin-left: 1em;
-  margin-top: 0px;
   display: grid;
-  place-items: center;
-  width: 100%;
-  height: 100%;
+  place-items: center; */
+ 
 }
 .abt-img{
-  max-width: 970px;
+  /* max-width: 970px; */
+  max-width: 600px;
+  width: 100%;
+  height: auto;
 }
 .t1{
   font-size: 50px;
   text-align: center;
-  margin-left: 23px;
+  /* margin-left: 23px; */
 }
 
+.about-layout{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
 .descriptionsAbout{
-  font-size: 1.5em;
+  font-size: 1.8rem;
   font-weight: 600;
   color: var(--color-dark--1);
-  margin-bottom: 3em;
+  font-family: josefine, sans-serif;
+  text-align: center;
+  margin-left: 1rem;
+  line-height: 1.5;
+  padding-bottom: 5rem;
+  /* margin-top: 2em;
+  margin-bottom: 2em; */
+ 
+  /* font-size: 1.5em;
+  font-weight: 600;
+  color: var(--color-dark--1);
+  padding-bottom: 3em;
+  padding-top: 0px;
   margin-left: 1em;
   margin-right: 1em;
   text-align: center;
   font-family: josefine, sans-serif;
   width: 100%;
   display: grid;
-  place-items: center;
+  place-items: center; */
 
 }
 hr {
   border: none; /* Remove any existing border */
   border-top: 1px solid var(--color-dark--2); /* Add a top border to create the line */
-  margin: 1em 0; /* Add some margin for spacing */
-  width: 50%; /* Ensure the line takes the full width */
+  margin: 1rem 0rem; /* Add some margin for spacing */
+  width: 100%; /* Ensure the line takes the full width */
 }
-.AboutText{ 
+
+.AboutText-desc,
+.AboutText-subText{
+  max-width: 800px;
+  margin: 0 auto;
+  
+}
+.AboutText-desc{
+  font-size: 22px !important;
+  font-weight: 600;
+  color: var(--color-dark--1);
+  text-align: center;
+  line-height: 1.5em;
+  
+}
+.AboutText-subText{
+  font-size: 16px !important;
+  font-weight: 548;
+
+}
+/* .AboutText{ 
 
   justify-content: center;
   position: absolute;
@@ -675,11 +739,23 @@ hr {
   width: 50%;
   text-align: center;
 
+} */
+
+
+.scroll-animate{
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.scroll-animate.visible{
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .aboutUs.hidden{
   display: none;
 }
+
 
 
 

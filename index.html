@@ -27,20 +27,23 @@
   
     <script type="module"  src="mapController.js"></script>
     <script type ="module" src="logRegisterView.js" ></script>
+    <script src="animate-scroll.js"></script>
     <title>Mapty</title>
   </head> 
   <body>
 
-  <section class="first " href="#login"> 
+  <section class="first "> 
     <div class="logRegPage ">
 
       <header class="header">
-        <div class="logo">
+        <div class="logo" href="#home">
+          <a href="#home" class="logo-text"></a>
           <img src="logo.png" />
 
 
         </div>
         <nav class="nav">
+          <a href="#login">Login</a>
           <a href="#about">About Us</a>
         </nav>
       </header>
@@ -51,7 +54,7 @@
             <use href="icons.svg#icon-loader"></use>
           </svg>
       </div>
-      <div class="wrapper">
+      <div class="wrapper" id="login">
         <div class="_form-box login" >
           <h1>Login, & pin!</h1>
 
@@ -205,14 +208,18 @@
     </div>
 
 
-    <section id="about" class="aboutUs hidden">
+    <section id="about" class="aboutUs hidden ">
       
       <div class="contents">
-          <h1 class="t1">About Mapty</h1>
-          <div class="about-img">
+
+        <div class="about-layout">
+
+        
+          <h1 class="t1 scroll-animate" style="opacity: 1; transform: none;">About Mapty</h1>
+          <div class="about-img scroll-animate">
             <img class="abt-img" src="./map3.png">
           </div>
-          <div class="descriptionsAbout">
+          <div class="descriptionsAbout scroll-animate">
   
             <p class="AboutText-desc"> <span class="maptyName">Mapty</span> - a workout webapp curated just for your easibility to track and <br>log your running and cycling workouts without ever forgetting about them.</p>
             <br>
@@ -229,8 +236,8 @@
   
           
 
+          </div>
         </div>
-      
         
       </div>
 
