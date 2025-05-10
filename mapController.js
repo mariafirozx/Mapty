@@ -3,17 +3,16 @@
  * user can log thier workouts eg running, cycling --- etc
  */
 
+'use strict';
+
+import { supabase } from './supabaseClient.js';
+
 
 import {wrapper} from './logRegisterView.js';
 import* as navigate from './scrollView.js';
+// import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-
-
-'use strict';
-
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
-const supabase = createClient("https://wrmulptnhbswyebikglj.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndybXVscHRuaGJzd3llYmlrZ2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc2MjkwMDYsImV4cCI6MjA1MzIwNTAwNn0.oisfRVLENbj0A2W3GMj4FVQyiNyshR-Exb1xewl6olk");
+// const supabase = createClient("https://wrmulptnhbswyebikglj.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndybXVscHRuaGJzd3llYmlrZ2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc2MjkwMDYsImV4cCI6MjA1MzIwNTAwNn0.oisfRVLENbj0A2W3GMj4FVQyiNyshR-Exb1xewl6olk");
 // // prettier-ignore
 // const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -157,11 +156,19 @@ class Cycling extends Workout{
     #workouts = [];
     #editWorkout = null;
     constructor(){
+        // this.mapContainer = document.querySelector('#map'); 
         // this._renderCard("warning", "Email Already Exists", "Please try using another email.");
 
+        // this._checkAuthState();
+
+        this._checkAuthState();
+       
         this._registerRender();
         this._loginRender();
-        this._render_aboutUs();
+        // this._checkAuthState();
+        // this._render();
+        // this.init();
+        // this._render_aboutUs();
 
 
         // if(regForm){
@@ -225,25 +232,103 @@ class Cycling extends Workout{
                 
             });
         });
-        // sidebar.addEventListener('click', (e)=>{
-        //     //hide form if open
-        //     // if(e.target.classList.contains('form')) return;
+
+    
+
+}
+
+
+async _checkAuthState(){
+    try{
+
+            //TRYING
+            // const { data: { session } } = await supabase.auth.getSession();
+        
+            // if (session) {
+            //     logRegPage.classList.add('hide');
+            //     main.classList.remove('hide');
+                
+            //     // Initialize map only if it doesn't exist
+            //     if (!this.#map) {
+            //         await this._getPosition();
+            //     }
+                
+            //     await this._renderWorkoutUI();
+                
+            //     if (!window.location.hash || window.location.hash === '#login') {
+            //         window.history.replaceState(null, '', '#home');
+            //     }
+            // } else {
+            //     // Clean up map if exists
+            //     if (this.#map) {
+            //         this.#map.remove();
+            //         this.#map = null;
+            //     }
+                
+            //     main.classList.add('hide');
+            //     logRegPage.classList.remove('hide');
+                
+            //     if (!window.location.hash || window.location.hash === '#home') {
+            //         window.history.replaceState(null, '', '#login');
+            //     }
+            // }
             
-        //     this.toggleWindow('formClear');
-        // });
+            // window.addEventListener('hashchange', navigate.navigateToSection);
+            // navigate.navigateToSection();
+
+        //RESTORE
+
+            const session = await this._getUserSession();
+
+            if(session){
+                logRegPage.classList.add('hide');
+                main.classList.remove('hide');
+                await this._renderWorkoutUI();
+
+                if(!window.location.hash || window.location.hash === '#login'){
+                    window.history.replaceState(null, '', '#home');
+                }
+
+            }else{
+                main.classList.add('hide');
+                logRegPage.classList.remove('hide');
+                console.log(hash);
+
+                if(!window.location.hash || window.location.hash === '#home' || window.location.hash === ''){
+                    window.history.replaceState(null, '', '#login');
+                    console.log('redirecting to login');
+                   
+                }
+            }
+
+
+            //setup navigation
+                window.addEventListener('hashchange', navigate.navigateToSection);
+
+                navigate.navigateToSection();
         
 
-        // this.addhandlerSetViewtoPop(this._setMapViewtoPop);
-        //  this._setMapViewtoPop();
+    }catch(err){
+         console.error(err , 'error checking auth state');
+         main.classList.add('hide');
+        logRegPage.classList.remove('hide');
+        window.history.replaceState(null, '', '#login');
     }
 
-    _render_aboutUs(){
+}
 
-        document.addEventListener('DOMContentLoaded' ,function(){
-            window.addEventListener('hashchange', navigate.navigateToSection);
 
-            navigate.navigateToSection();
+    
+    _render(){
+
+        window.addEventListener('load', ()=>{
+            navigate.navigateToSection()
+        });
+        window.addEventListener('hashchange', ()=>{
+            navigate.navigateToSection()
         })
+
+        // window.addEventListener('hashchange', navigate.navigateToSection);        
 
         // document.querySelector('a[href="#about"]').addEventListener('click',function(){
         //     navigate();
@@ -323,7 +408,7 @@ class Cycling extends Workout{
 
     }
 
-    async _userReg(){
+async _userReg(){
 
     try{
 
@@ -373,7 +458,7 @@ class Cycling extends Workout{
     } catch(err){console.error(err)}
 }
 
-   async _userAuth(){
+async _userAuth(){
     try{
 
         const email = username.value;
@@ -386,21 +471,51 @@ class Cycling extends Workout{
         })
 
         if (error) {
-            const msg = document.querySelector('.error__title');
-            msg.textContent = 'Invalid email or password!';
+            alert('Invalid email or password!');
             errCard.classList.remove('hide');
-
-            setTimeout(()=>{
+            const errTitle = document.querySelector('.error__title');
+            errTitle.textContent = 'Invalid email or password! Please try again.';
+            setTimeout(() => {  
                 errCard.classList.add('hide');
-            },3000)
+            }, 3000)
+            // const msg = document.querySelector('.error__title');
+            // msg.textContent = 'Invalid email or password!';
+            // errCard.classList.remove('hide');
+
+            // setTimeout(()=>{
+            //     errCard.classList.add('hide');
+            // },3000)
         }else{
 
-            logRegPage.classList.toggle('hide');
-            main.classList.toggle('hide');
+            logRegPage.classList.add('hide');
+            main.classList.remove('hide');
 
-            // const user_id = await this._getUser();
-           await this._renderWorkoutUI();
-            // await this._fetchWorkout(user_id);
+            window.location.hash = 'home';
+
+            await this._renderWorkoutUI();
+
+        //     const{
+        //         data: {session},
+                
+        //     } = await supabase.auth.getSession();
+
+        //     if(session && window.location.hash === '#home'){
+        //         logRegPage.classList.add('hide');
+        //         main.classList.remove('hide');
+        //         await this._renderWorkoutUI();
+
+        // }
+           
+
+        //     logRegPage.classList.add('hide');
+        //     main.classList.remove('hide');
+
+        //     window.location.hash = 'home';
+
+
+
+        //     // const user_id = await this._getUser();
+        //    await this._renderWorkoutUI();
 
             
             //fetch username
@@ -431,7 +546,73 @@ class Cycling extends Workout{
 
  }
 
-    async _getUser(){
+ async _userValid(){
+ 
+     try{
+ 
+         //if user alr exist -> show email already registered msg
+         const {data, err} = await supabase
+         .from('users')
+         .select('email')
+         .eq('email', regEmail.value);
+ 
+         
+         if(data && data.length > 0){
+             console.log(data);
+             errCard.classList.remove('hide');
+ 
+             setTimeout(() => {
+                 errCard.classList.add('hide');
+             }, 3000);
+             
+             
+         }
+        
+         else{
+             this._userReg();
+             wrapper.classList.remove('active');
+ 
+         }
+ 
+     }catch(err){
+ 
+     }
+ }
+ //checking user session
+
+ async _getUserSession(){
+   
+        const{data: {session}} = await supabase.auth.getSession();
+
+        return session;
+
+        //user logged in 
+    //     if(session){
+    //         logRegPage.classList.add('hide');
+    //         main.classList.remove('hide');
+
+    //         if(window.location.hash !== '#home'){
+    //             window.location.hash = '#home';
+    //         }
+
+    //         await this._renderWorkoutUI();
+
+    //         //user not logged in
+    //     }else{
+    //         main.classList.add('hide');
+    //         logRegPage.classList.remove('hide');
+
+    //         if(window.location.hash !== '#login'){
+    //             window.location.hash = '#login';
+    //         }
+    //     // await this._renderWorkoutUI();
+    // }
+}
+
+
+ //getting the logged in user
+
+async _getUser(){
         try{
             const {data: {user}} = await supabase.auth.getUser();
              return user.id;
@@ -440,68 +621,35 @@ class Cycling extends Workout{
 
         }
 
-    }
+}
+    
 
-    async _userValid(){
-        try{
-
-            //if user alr exist -> show email already registered msg
-            const {data, err} = await supabase
-            .from('users')
-            .select('email')
-            .eq('email', regEmail.value);
-
-            
-            if(data && data.length > 0){
-                console.log(data);
-                errCard.classList.remove('hide');
-
-                setTimeout(() => {
-                    errCard.classList.add('hide');
-                }, 3000);
-                
-                
-            }
-           
-            else{
-                this._userReg();
-                wrapper.classList.remove('active');
-
-            }
-
-        }catch(err){
-
-        }
-    }
-
-    _renderCard(type, message, subMsg){
-
-        //show message card 
-        
-        document.getElementById('closeMessage').addEventListener('click', ()=>{
-            messageCard.classList.add('hide');
-        })
-
-
-        
-
-        card.innerHTML ='';
-        card.insertAdjacentHTML('afterbegin', el);
-        card.classList.remove('hide');
-        
-        
-        // card.innerHTML = el;
-        //clear
-        
-        // card.classList.remove('hide');
-
-    }
+    
 
 
  ////////////////////////////--WILL SEPERATE MAP VIEW & AUTH/////////////////////////////////////////////
     _getPosition(){
 
+        //TRYINH
+        // return new Promise((resolve, reject) => {
+        //     if (navigator.geolocation) {
+        //         navigator.geolocation.getCurrentPosition(
+        //             (pos) => {
+        //                 this._loadMap(pos);
+        //                 resolve();
+        //             },
+        //             (err) => {
+        //                 console.error('Geolocation error:', err);
+        //                 reject(err);
+        //             }
+        //         );
+        //     } else {
+        //         reject(new Error('Geolocation not supported'));
+        //     }
+        // });
+
         //using bind since this keyword is undefined in a reg function, and loadMap here is reg function
+        // THIS RESTORE
         if(navigator.geolocation){
             navigator.geolocation.getCurrentPosition(this._loadMap.bind(this),function(){
         
@@ -512,6 +660,32 @@ class Cycling extends Workout{
 
     _loadMap(pos){
         try{
+
+            //TRYING
+            // if (this.#map) {
+            //     this.#map.remove(); // Clean up existing map
+            // }
+    
+            // const { latitude, longitude } = pos.coords;
+            // const coords = [latitude, longitude];
+            
+            // // Initialize new map
+            // this.#map = L.map('map').setView(coords, 13);
+            
+            // L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+            //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            // }).addTo(this.#map);
+    
+            // this.#map.on('click', this._showForm.bind(this));
+            
+            // // Only render markers if workouts exist
+            // if (this.#workouts && this.#workouts.length > 0) {
+            //     this.#workouts.forEach(work => {
+            //         this._renderWorkoutMarker(work);
+            //     });
+            // }
+
+            //RESTORE
 
         const {latitude} = pos.coords; //same var name as coords
         const {longitude} = pos.coords;
@@ -609,14 +783,30 @@ class Cycling extends Workout{
             // this.#editWorkout = null;
             workout.id = id;
             workout.date = this.#editWorkout.date;
-            const i = this.#workouts.findIndex(work => work.id === id);
+            const i = this.#workouts.findIndex(work => work.id.toString() === id);
             this.#workouts[i] = workout;
             //update UI
             // setTimeout(() => {
             //     document.querySelector(`.workout[data-id="${id}"]`).remove();
             // }, 2.5 * 1000);
 
-            document.querySelector(`.workout[data-id="${id}"]`).remove(); //remove the old one from UI and render the new one
+            const {error} = await supabase
+                .from('workout')
+                .update({
+                    coords: JSON.stringify(workout.coords),
+                    workoutType: workout.type, 
+                    workoutDistance: workout.distance,
+                    workoutDuration: workout.duration,
+                    workoutCadence: workout.cadence,
+                    workoutDate: workout.date.toLocaleString('en-CA', {timeZone: 'Asia/Kuala_Lumpur'}).split(',')[0],
+                })
+                .eq('workout_id', workout.id);
+            if(error){
+                alert('Workout not updated');
+            }
+            document.querySelector(`.workout[data-id="${id}"]`).remove();//remove the old one from UI and render the new one
+            // remove from supabase
+            
             this.#editWorkout = null;
             // this.toggleWindow('RenderSpinner')
         } else{
@@ -642,7 +832,15 @@ class Cycling extends Workout{
             }
             // workout.date = date;
             // console.log(workout.date);
-            this.#workouts.push(workout);
+        this.#workouts.push(workout);
+
+        this.#workouts.map(work => {
+            console.log(work);
+        })
+
+        this._setSupbaseWorkouts(workout);
+        console.log(workout);
+       
         //add new obj to workput array
             // this.#workouts.push(workout);
     }
@@ -651,8 +849,8 @@ class Cycling extends Workout{
         this._renderWorkoutMarker(workout);
         console.log(workout.id);
         
-        // this._renderWorkout(workout);
-       await this._renderWorkoutUI();
+        this._renderWorkout(workout);
+    //    await this._renderWorkoutUI();
 
         this._hideform();
 
@@ -665,8 +863,8 @@ class Cycling extends Workout{
         //insert details in supabase
         // const userId = await this._getUser();
         // console.log(userId);
-        this._setSupbaseWorkouts(workout);
-        console.log(workout);
+        // this._setSupbaseWorkouts(workout);
+        // console.log(workout);
         // console.log(workout.type, workout.distance, workout.duration, workout.date,userId);
 
         // const user_id = await this._getUser();
@@ -710,8 +908,8 @@ class Cycling extends Workout{
                             );
                     parsedWorkout.id = workout.workout_id;
 
-                    const utcDate = new Date(workout.workoutDate);
-                    parsedWorkout.date = new Date(utcDate.toLocaleString('en-US', {timeZone: 'Asia/Kuala_Lumpur'}));
+                    parsedWorkout.date = new Date(workout.workoutDate);
+                    parsedWorkout._setDescription();
                     console.log(parsedWorkout.date);
                     return parsedWorkout;
                     
@@ -731,18 +929,43 @@ class Cycling extends Workout{
 
     async _renderWorkoutUI(){
 
-        //get userid 
+        //TRYING
+
         const user_id = await this._getUser();
         const workouts = await this._fetchWorkout(user_id);
-
-        if(workouts && workouts.length > 0){
-            workouts.forEach(workout =>{
-                this._renderWorkout(workout);
-                this._renderWorkoutMarker(workout);
-            } );
-        }else{
-            console.log('no workouts found for this user');
+    
+        if (workouts && workouts.length > 0) {
+            this.#workouts = workouts;
+            
+            // Only render markers if map exists
+            if (this.#map) {
+                workouts.forEach(workout => {
+                    this._renderWorkout(workout);
+                    this._renderWorkoutMarker(workout);
+                });
+            } else {
+                console.warn('Map not initialized - skipping marker rendering');
+            }
+        } else {
+            console.log('No workouts found for this user');
         }
+
+        //RESTORE
+
+        //get userid 
+        // const user_id = await this._getUser();
+        // const workouts = await this._fetchWorkout(user_id);
+
+        // if(workouts && workouts.length > 0){
+
+        //     this.#workouts = workouts; //set the workouts to the class property
+        //     workouts.forEach(workout =>{
+        //         this._renderWorkout(workout);
+        //         this._renderWorkoutMarker(workout);
+        //     } );
+        // }else{
+        //     console.log('no workouts found for this user');
+        // }
 
     }
 
@@ -852,11 +1075,19 @@ class Cycling extends Workout{
         //e is the el thats clicked --> closest opp of query selection, wherever the click happens in 'workout' 
         //everything would end up in the workout li, by accessing workout we will access id
         const workoutEl = e.target.closest('.workout');
+        console.log(workoutEl);
 
         if(!workoutEl) return;
 
-        const workout = this.#workouts.find(work => work.id === 
-            workoutEl.dataset.id ); 
+        console.log(`current workouts`, this.#workouts);
+        const workout = this.#workouts.find(work => work.id.toString() === 
+            workoutEl.dataset.id 
+            
+        ); 
+
+        // console.log('DOM id'+ workoutEl.dataset.id);
+        // console.log('workout id'+ this.#workouts.map(work => work.id));
+        // console.log(workout);
         
         if(!workout) return;
 
@@ -899,7 +1130,7 @@ class Cycling extends Workout{
 
     _setMapViewtoPop(workoutId) {
 
-        const workout = this.#workouts.find((work) => work.id === workoutId); //find the workout popup with the given ID
+        const workout = this.#workouts.find((work) => work.id.toString() === workoutId); //find the workout popup with the given ID
         if (!workout) {
           console.error('No workout found for the given ID:', workoutId);
           return;
@@ -915,22 +1146,22 @@ class Cycling extends Workout{
             
   }    
 
-    _getLocalStorage(){
-        const data = JSON.parse(localStorage.getItem('workout'));
+    // _getLocalStorage(){
+    //     const data = JSON.parse(localStorage.getItem('workout'));
 
-        if(!data) return;
+    //     if(!data) return;
 
-        this.#workouts = data; 
-        this.#workouts.forEach(work => {
-            this._renderWorkout(work);
-            //render marker wont work here since this get executed at the  page load=map 
-            //is undefined at page load.
+    //     this.#workouts = data; 
+    //     this.#workouts.forEach(work => {
+    //         this._renderWorkout(work);
+    //         //render marker wont work here since this get executed at the  page load=map 
+    //         //is undefined at page load.
 
-            //---> so , the pos of user is to get, then map has to be loaded bfr we can render marker
+    //         //---> so , the pos of user is to get, then map has to be loaded bfr we can render marker
 
-        })
+    //     })
 
-    }
+    // }
 
    async _deleteWorkout(e){
 
@@ -950,6 +1181,7 @@ class Cycling extends Workout{
             const workout_ID = workoutEl.dataset.id;
             console.log(`deleting workout with id ${workout_ID} `);
 
+           
             //find workout  in array
             const workoutIndex = this.#workouts.findIndex(work => work.id === +workout_ID);
             if(workoutIndex === -1){
@@ -1032,7 +1264,7 @@ class Cycling extends Workout{
         try{
             let workout = e.target.closest('.workout');
             if(!workout) return;
-            const workoutEl = this.#workouts.find(work => work.id === workout.dataset.id);
+            const workoutEl = this.#workouts.find(work => work.id.toString() === workout.dataset.id);
             console.log(`workout found ${workoutEl}`);
             if(!workoutEl) return;
 
@@ -1119,16 +1351,16 @@ class Cycling extends Workout{
     }
 
 
-    _setLocalStorage(){
-        //a very simple API --> only to be used small data, not large data...
-      localStorage.setItem('workout', JSON.stringify(this.#workouts));
-    }
+    // _setLocalStorage(){
+    //     //a very simple API --> only to be used small data, not large data...
+    //   localStorage.setItem('workout', JSON.stringify(this.#workouts));
+    // }
    
-    reset(){
+    // reset(){
 
-        localStorage.removeItem('workout');
-        location.reload();
-    }
+    //     localStorage.removeItem('workout');
+    //     location.reload();
+    // }
 
     toggleWindow(action){
 
@@ -1175,7 +1407,7 @@ class Cycling extends Workout{
 
         //if no workouts
     
-        if(localStorage.length === 0 && !this.#workouts) return;
+        if(!this.#workouts) return;
     
         
         // clearAllCard.classList.remove('hide');
@@ -1232,7 +1464,13 @@ class Cycling extends Workout{
         
     }
 
+    
+
+
+    
 }
+
+
 
 // _clearAllWorkouts() {
 //     this.showCard();
