@@ -72,6 +72,7 @@ const homeSection = document.querySelector('#home');
 
         if(hash === '#about'){
             aboutUsSection.classList.remove('hidden');
+            console.log(aboutUsSection, 'navigation to about us');
             // loginSection.classList.add('hide');
             // aboutUsSection.classList.remove('hidden');
             // homeSection.classList.add('hide');
@@ -88,10 +89,12 @@ const homeSection = document.querySelector('#home');
         }else if(hash === '#home'){
             if(session){
                 homeSection.classList.remove('hide');
+
                 console.log(session);
                 console.log(hash);
             }else{
                 loginSection.classList.remove('hide');
+                console.log('navigation to login');
                 window.history.replaceState(null, '', '#login');
             }
             // loginSection.classList.add('hide');
@@ -111,7 +114,7 @@ const homeSection = document.querySelector('#home');
             // console.log(hash);
         }else if(!hash || hash === '#login'){
             loginSection.classList.remove('hide');
-            loginSection.style.display = 'block'; // Fallback to ensure visibility
+            // loginSection.style.display = 'block'; // Fallback to ensure visibility
             window.history.replaceState(null, '', '#login');
             // window.history.replaceState(null, '', '#login');
             console.log('navigation to login');

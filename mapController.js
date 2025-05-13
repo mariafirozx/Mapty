@@ -56,6 +56,10 @@ const confirmBtn = document.querySelector('.confirmBtn');
 const noBtn = document.querySelector('.noBtn');
 const logBtn = document.getElementById('login-btn');
 const regBtn = document.getElementById('register-btn');
+const logoutBtn = document.querySelector('.BtnLogout');
+const logoutCard = document.querySelector('.logoutCard');
+const logoutCardNo = document.querySelector('.goBack');
+const logCardConfirmBtn = document.querySelector('.logoutBtn');
 
 const loginForm = document.getElementById('form-log');
 const regForm = document.getElementById('form-reg');
@@ -161,6 +165,7 @@ class Cycling extends Workout{
 
         // this._checkAuthState();
 
+        // this._render();
         this._checkAuthState();
        
         this._registerRender();
@@ -202,6 +207,11 @@ class Cycling extends Workout{
 
         //attach event handlers
 
+        window.addEventListener('resize', ()=>{
+            if(this.#map){
+                this.#map.invalidateSize();
+            }
+        })
         form.addEventListener('submit', this._newWorkout.bind(this));
         inputType.addEventListener('change', this._toggleElevationField);
             //makes sure one of them is hidden when other is clicked 
@@ -232,6 +242,9 @@ class Cycling extends Workout{
                 
             });
         });
+
+        //logout
+        logoutBtn.addEventListener('click', this._logout.bind(this));
 
     
 
@@ -281,18 +294,37 @@ async _checkAuthState(){
             const session = await this._getUserSession();
 
             if(session){
+                this._userEmail = session.user.email;
+
+
                 logRegPage.classList.add('hide');
                 main.classList.remove('hide');
+
+                 const name = document.querySelector('.name');
+                const userName = await this._getUserName(this._userEmail);
+                name.textContent = userName;
+
+
                 await this._renderWorkoutUI();
 
                 if(!window.location.hash || window.location.hash === '#login'){
                     window.history.replaceState(null, '', '#home');
                 }
 
+                if(!this.#map){
+                    await this._getPosition();
+                }
+
             }else{
                 main.classList.add('hide');
                 logRegPage.classList.remove('hide');
-                console.log(hash);
+                
+                // if(window.location.hash === '#about'){
+                //     logRegPage.classList.add('hide');
+                //     about_us_page.classList.remove('hidden');
+                //     console.log(about_us_page, window.location.hash);
+                    
+                // }
 
                 if(!window.location.hash || window.location.hash === '#home' || window.location.hash === ''){
                     window.history.replaceState(null, '', '#login');
@@ -471,7 +503,6 @@ async _userAuth(){
         })
 
         if (error) {
-            alert('Invalid email or password!');
             errCard.classList.remove('hide');
             const errTitle = document.querySelector('.error__title');
             errTitle.textContent = 'Invalid email or password! Please try again.';
@@ -492,7 +523,23 @@ async _userAuth(){
 
             window.location.hash = 'home';
 
+
             await this._renderWorkoutUI();
+
+            this._userEmail = userAuth.user.email;
+
+            const name = document.querySelector('.name');
+                const userName = await this._getUserName(this._userEmail);
+                name.textContent = userName;
+
+
+           
+
+
+
+
+
+
 
         //     const{
         //         data: {session},
@@ -519,11 +566,14 @@ async _userAuth(){
 
             
             //fetch username
-            const {data: user} = await supabase
-                .from('users')
-                .select('username')
-                .eq('email', userAuth.user.email)
-                .single();
+            // const {data: user} = await supabase
+            //     .from('users')
+            //     .select('username')
+            //     .eq('email', userAuth.user.email)
+            //     .single();
+
+            
+            // alert(`Welcome back ${user.username}`);
 
             // const {data: users} = await supabase
             //     .from('users')
@@ -534,10 +584,10 @@ async _userAuth(){
             //     console.log(users);
             // }
         
-            if(user){
-                alert(`Welcome ${user.username}`);
-                
-            }
+            
+
+           
+
         }
 
     }catch(err){
@@ -622,13 +672,111 @@ async _getUser(){
         }
 
 }
-    
 
-    
+async _getUserName(email){
+    try{
+        const {data: user} = await supabase
+                .from('users')
+                .select('username')
+                .eq('email', email)
+                .single();
+
+        return user.username;
+
+    }catch(err){}
+}
+async _logout(){
+    try{
+
+        //show the card
+        this.toggleWindow('logoutCardClear');
+
+        console.log('user email', this._userEmail);
+
+        if(!this._userEmail){
+            console.log('username undefined, cannot fetch');
+            return
+        }
+
+
+
+        logCardConfirmBtn.removeEventListener('click', this._logoutHandler);
+        logoutCardNo.removeEventListener('click', this._goBackHandler);
+        overlay.removeEventListener('click', this._overlayHandler);
+
+       // set usrname 
+        const user = await this._getUser();
+        console.log(user);
+        const username = await this._getUserName(this._userEmail);
+        const logoutUsername = document.querySelector('.username');
+        logoutUsername.textContent = username;
+
+        console.log('error setting username');
+        console.log(logoutUsername);
+        console.log(username);
+
+        this._logoutHandler = async (e)=>{
+            e.preventDefault();
+            //hide the card
+            this.toggleWindow('logoutCardClear');
+            //logout
+            const {error} = await supabase.auth.signOut();
+
+            if(error){
+                alert('Error logging out');
+                return;
+            }
+
+            main.classList.add('hide');        
+            logRegPage.classList.remove('hide');
+            window.location.hash = '#login';
+
+            location.reload(); //reloads the page
+
+        }
+
+        this._goBackHandler =  (e)=>{
+            e.preventDefault();
+
+            this.toggleWindow('logoutCardClear');
+
+            return;
+        }
+
+        this._overlayHandler =  (e)=>{
+            e.preventDefault();
+            this.toggleWindow('logoutCardClear');
+
+            return;
+        }
+
+        logCardConfirmBtn.addEventListener('click', this._logoutHandler);
+        logoutCardNo.addEventListener('click', this._goBackHandler);
+        overlay.addEventListener('click', this._overlayHandler);
+
+        // const {error} = await supabase.auth.signOut();
+
+        //  if(error){
+        //     alert('Error logging out');
+        //     return;
+        // }
+
+        //  main.classList.add('hide');        
+        // logRegPage.classList.remove('hide');
+        // window.location.hash = '#login';
+
+        // location.reload(); //reloads the page
+
+        // alert('Logged out successfully');
+ 
+    }catch(err){
+        console.error(err);
+    }
+}
 
 
  ////////////////////////////--WILL SEPERATE MAP VIEW & AUTH/////////////////////////////////////////////
-    _getPosition(){
+    async _getPosition(){
 
         //TRYINH
         // return new Promise((resolve, reject) => {
@@ -651,9 +799,14 @@ async _getUser(){
         //using bind since this keyword is undefined in a reg function, and loadMap here is reg function
         // THIS RESTORE
         if(navigator.geolocation){
-            navigator.geolocation.getCurrentPosition(this._loadMap.bind(this),function(){
-        
-            }, 
+            navigator.geolocation.getCurrentPosition(
+                pos =>{
+                    setTimeout(() => {
+                        this._loadMap(pos);
+
+                    }, 100);
+                }
+                        
        )};
         
     } 
@@ -703,6 +856,10 @@ async _getUser(){
             this.#workouts.forEach(work => {
                 this._renderWorkoutMarker(work);
             })
+            
+            setTimeout(() => {
+                window.dispatchEvent(new Event('resize'));
+            }, 500);
 
         }catch(err){
             console.error(err);
@@ -783,6 +940,7 @@ async _getUser(){
             // this.#editWorkout = null;
             workout.id = id;
             workout.date = this.#editWorkout.date;
+            workout._setDescription();
             const i = this.#workouts.findIndex(work => work.id.toString() === id);
             this.#workouts[i] = workout;
             //update UI
@@ -798,7 +956,7 @@ async _getUser(){
                     workoutDistance: workout.distance,
                     workoutDuration: workout.duration,
                     workoutCadence: workout.cadence,
-                    workoutDate: workout.date.toLocaleString('en-CA', {timeZone: 'Asia/Kuala_Lumpur'}).split(',')[0],
+                    workoutDate: workout.date,
                 })
                 .eq('workout_id', workout.id);
             if(error){
@@ -1277,6 +1435,7 @@ async _getUser(){
            inputType.value = workoutEl.type;
            inputDistance.value = workoutEl.distance;
            inputDuration.value = workoutEl.duration;
+              inputDate.value = workoutEl.date.toISOString().split('T')[0]; //format date to YYYY-MM-DD
 
            if(workoutEl.type === 'running'){
 
@@ -1382,6 +1541,12 @@ async _getUser(){
         }
         if(action === 'RenderSpinner'){
             spinner.classList.toggle('hidden');
+        }
+
+        if(action === 'logoutCardClear'){
+            logoutCard.classList.toggle('hide');
+            overlay.classList.toggle('hide');
+
         }
        
     }
