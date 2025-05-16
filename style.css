@@ -82,8 +82,9 @@ html{
   align-items: center;
   min-height: 100vh;
   /* background: linear-gradient(rgb(39, 106, 161) 0%, rgb(59, 221, 145) 100%); */
-  background: linear-gradient(-45deg, rgb(39, 106, 161), rgb(59, 221, 145), var(--color-brand--1), var(--color-dark--2));
+  background: linear-gradient(-45deg, #001247, #000066, #000d33, #00001a);
 
+  /* background: #001247; */
   /* background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab); */
   animation: gradient 15s ease infinite;
   background-size: 300% 300%;
@@ -104,7 +105,8 @@ html{
 }
 
 .logRegPage::before {
-  background:  rgb(39, 106, 161);
+  /* background:  rgb(39, 106, 161); */
+  background: #000066;
   filter: url(#noiseFilter);
   z-index: 1;
 }
@@ -164,8 +166,9 @@ html{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(-45deg, rgb(39, 106, 161), rgb(59, 221, 145), var(--color-brand--1), var(--color-dark--2));
+  background: linear-gradient(-45deg, #001247, #000066, #000d33, #00001a);
 
+  /* background: linear-gradient(-45deg, rgb(39, 106, 161), rgb(59, 221, 145), var(--color-brand--1), var(--color-dark--2)); */
   /* background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab); */
   animation: gradient 15s ease infinite;
   background-size: 300% 300%;
@@ -191,14 +194,15 @@ html{
 }
 
 .header::before {
-  background:  rgb(39, 106, 161);
+  /* background:  rgb(39, 106, 161); */
+  background: #000066;
   filter: url(#noiseFilter);
   z-index: 100;
 }
 .nav a{
   position: relative;
   font-size: 22px;
-  color: var(--color-dark--1) !important;
+  color: white !important;
   text-decoration: none;
   font-weight: 700;
   font-family: "Josefin Sans", serif;
@@ -217,7 +221,7 @@ html{
   left: 0;
   width: 0;
   height: 2px;
-  background-color: var(--color-dark--1) !important;
+  background-color: var(--color-brand--2) !important;
 
   transition: .3s;
 }
@@ -288,7 +292,7 @@ html{
 h1{
   font-family: "Josefin Sans", serif;
   /* color: #095833; */
-  color: var(--color-dark--1);
+  color: white;
 
   /* color: #fff; */
   font-weight: 500;
@@ -338,7 +342,7 @@ h1{
 }
 .input-box :focus{
   border: 2px solid var(--color-brand--2);
-  box-shadow: 0 0 3px var(--color-brand--2);
+  box-shadow: 0px 0px 3px var(--color-brand--2);
 
 }
 .wrapper .remember-forgot{
@@ -353,11 +357,11 @@ h1{
   margin-right: 3px;
 }
 .remember-forgot label{
-  color: var(--color-dark--1);
+  color: var(--color-brand--2);
   font-weight: 600;
 }
 .remember-forgot a{
-  color: var(--color-dark--1) !important;
+  color: var(--color-brand--2) !important;
   text-decoration: none;
   font-weight: 600;
 }
@@ -367,7 +371,7 @@ h1{
 .wrapper .btn{
   width: 100%;
   height: 45px;
-  background: var(--color-dark--1);
+  background: var(--color-brand--2);
   border: none;
   outline: none;
   border-radius: 15px;
@@ -390,7 +394,7 @@ h1{
   margin: 20px 0 15px;
 }
 .register-link p a{
-  color: var(--color-dark--1);
+  color: var(--color-brand--2);
   text-decoration: none;
   font-weight: 600;
   gap: 2px;
@@ -643,7 +647,7 @@ h1{
   /* make scrollbar transparent */
 }
 .aboutUs::-webkit-scrollbar-thumb{
-  background: var(--color-dark--2);
+  background: var(--color-brand--2);
   border-radius: 10px;
   /* make scrollbar transparent */
 }
@@ -714,7 +718,7 @@ h1{
 .descriptionsAbout{
   font-size: 1.8rem;
   font-weight: 600;
-  color: var(--color-dark--1);
+  color: white;
   font-family: josefine, sans-serif;
   text-align: center;
   margin-left: 1rem;
@@ -739,7 +743,7 @@ h1{
 }
 hr {
   border: none; /* Remove any existing border */
-  border-top: 1px solid var(--color-dark--2); /* Add a top border to create the line */
+  border-top: 1px solid var(--color-brand--2); /* Add a top border to create the line */
   margin: 1rem 0rem; /* Add some margin for spacing */
   width: 100%; /* Ensure the line takes the full width */
 }
@@ -753,7 +757,7 @@ hr {
 .AboutText-desc{
   font-size: 22px !important;
   font-weight: 600;
-  color: var(--color-dark--1);
+  color: white;
   text-align: center;
   line-height: 1.5em;
   
@@ -814,13 +818,34 @@ hr {
   line-height: 1.6;
   height: 100vh;
   overscroll-behavior-y: none;
-  background: linear-gradient(45deg, #00467F, #A5CC82,#16A085, #CC95C0);
+  background: linear-gradient(-45deg, #001247, #000066, #000d33, #00001a);
   background-size: 300% 300%;
   /* background-color: black; */
   padding: 2.5rem;
   display: flex;
-  animation: color 30s ease-in-out infinite;
+  animation: gradient 15s ease infinite;
+  background-size: 300% 300%;
+  z-index: 3000;
+}
 
+.main-page::before,
+.main-page::after {
+  position: absolute;
+  left: 0;
+  top: 0;
+  content: '';
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+
+  opacity: 40%;
+}
+
+.main-page::before {
+  /* background:  rgb(39, 106, 161); */
+  background: #000066;
+  filter: url(#noiseFilter);
+  z-index: 1;
 }
 
 .main-page.hidden{
@@ -842,8 +867,10 @@ a:visited {
   border-radius: 30px ;
   border-top-right-radius	: 0px;
   border-bottom-right-radius	: 0px;
+  
 
   transition: all 0.5s ease-in-out;
+  z-index: 1;
 }
 
 .logo {
@@ -1465,16 +1492,16 @@ a:visited {
    display: block;
    position: fixed; */
   left: 0;
-  bottom: 0px;
+  bottom: 0;
   width: 100%;
-  height: 24px;
-  background: linear-gradient(-45deg, rgb(39, 106, 161), rgb(59, 221, 145), var(--color-brand--1), var(--color-dark--2));
+  height: 25px;
+  background: linear-gradient(-45deg, #001247, #000066, #000d33, #00001a);
 
+  /* background: linear-gradient(-45deg, rgb(39, 106, 161), rgb(59, 221, 145), var(--color-brand--1), var(--color-dark--2)); */
   /* background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab); */
   animation: gradient 15s ease infinite;
   background-size: 300% 300%;
   backdrop-filter: blur(10px);
-  color: white;
   text-align: center;
   z-index: 200;
   display: block;
@@ -1497,21 +1524,22 @@ a:visited {
 }
 
 .contain::before {
-  background:  rgb(39, 106, 161);
+  /* background:  rgb(39, 106, 161); */
+  background: #000066;
   filter: url(#noiseFilter);
   z-index: 100;
 }
 
 .text{
   font-family: josefin sans;
-  font-size: 9px;
-  color: var(--color-dark--1);
+  font-size: 12px;
+  color: var(--color-brand--2);
   letter-spacing: 2px;
   margin-top: 10px;
   
 }
 
 .contain a{
-  color: var(--color-dark--1);
+  color: var(--color-brand--2);
   text-decoration: underline;
 }
