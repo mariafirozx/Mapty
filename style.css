@@ -160,8 +160,9 @@ html{
   top: 0;
   left: 0;
   width: 100%;
-  height: 11%;
-  padding: 0px 70px;
+  height: 12vh; /*viewport units instead of percentage*/
+  padding: 0 5%; 
+  min-height: 80px;
  
   display: flex;
   justify-content: space-between;
@@ -199,17 +200,30 @@ html{
   filter: url(#noiseFilter);
   z-index: 100;
 }
+.nav{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(2rem, 5vw, 5rem);
+  right: auto;
+  padding-right: 2rem;
+  z-index: 1000;
+}
 .nav a{
   position: relative;
-  font-size: 22px;
+  font-size: clamp(2rem, 2.5vw, 1.375rem);
   color: white !important;
   text-decoration: none;
   font-weight: 700;
   font-family: "Josefin Sans", serif;
+  padding: 0.5em 0;
+  margin: 0;
+  
 
-  margin-top: 1em;
-  left: 2px !important;
-  margin-right: 3rem !important;
+  /* margin-top: 1em;
+  left: 1rem !important;
+  right: 25rem !important; */
   
   z-index: 1000;
 }
@@ -217,7 +231,7 @@ html{
 .nav a::before{
   content: '';
   position: absolute;
-  top: 100%;
+  top: 80%;
   left: 0;
   width: 0;
   height: 2px;
@@ -229,18 +243,21 @@ html{
   width: 100%;
 }
 .logo {
-  margin-top: 3em;
-  width: auto;
-  max-height: none;
-  height: auto;
-  display: block;
-  margin-left: 1em;
+  top: 6px;
+  position: relative;
+  height: 100%;
+  align-items: center;
+  
+  display: flex;
+  padding-left: 1em;
   z-index: 1000;
 }
 .logo img{ 
 
-  height: auto;
-  max-width: 45% !important;
+  height: 60px;
+  width: 170px;
+  max-width: 150px;
+  /* max-height: 95px; */
 }
 
 
@@ -321,7 +338,7 @@ h1{
   background: transparent;
   border: none;
   outline: none;
-  border: 2px solid rgba(247, 239, 239, 0.2);
+  border: 2px solid rgba(246, 246, 246, 0.516);
   border-radius: 40px;
   font-size: 16px;
   color: #fff;
