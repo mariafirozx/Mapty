@@ -28,6 +28,13 @@
     <script type="module"  src="mapController.js"></script>
     <script type ="module" src="logRegisterView.js" ></script>
     <script src="animate-scroll.js"></script>
+
+    <script>
+      if(window.opener === null && window.location.href === 'https://maptyco.netlify.app/'){
+        window.open(window.location.href, '_blank');
+      }
+    </script>
+
     <title>Mapty</title>
   </head> 
   <body>
