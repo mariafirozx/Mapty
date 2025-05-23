@@ -1130,7 +1130,7 @@ async _logout(){
     _renderWorkoutMarker(workout){
 
         const icon = L.icon({
-            iconUrl: 'marker-icon.png',
+            iconUrl: 'imgs/marker-icon.png',
             iconSize: [50, 55],
             iconAnchor: [24, 3],
            
