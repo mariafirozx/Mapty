@@ -11,4 +11,4 @@
   
 ## **LIVE DEMO**
 
-Link -> https://maptyco.netlify.app/
+Link -> https://maptyco.netlify.app/#login
